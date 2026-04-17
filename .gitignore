@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### env file ###
+*.env*
+*env*
+
+### utils ###
+*.codex*
+*codex*
