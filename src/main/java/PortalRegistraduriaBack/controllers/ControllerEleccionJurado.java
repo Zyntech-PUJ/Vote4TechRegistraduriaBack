@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import PortalRegistraduriaBack.dtos.dashboard.DashboardEleccionDTO;
 import PortalRegistraduriaBack.dtos.eleccionjurado.CreateEleccionJuradoDTO;
 import PortalRegistraduriaBack.dtos.eleccionjurado.ResponseEleccionJuradoDTO;
 import PortalRegistraduriaBack.services.eleccionjurado.IServiceEleccionJurado;
@@ -41,6 +42,16 @@ public class ControllerEleccionJurado {
   @GetMapping("/eleccion/{idEleccion}")
   public ResponseEntity<List<ResponseEleccionJuradoDTO>> obtenerJuradosPorEleccion(@PathVariable Long idEleccion) {
     return ResponseEntity.ok(serviceEleccionJurado.findByEleccion(idEleccion));
+  }
+
+  @Operation(summary = "Obtener estadísticas de jurados para el dashboard de una elección")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Dashboard consultado correctamente"),
+      @ApiResponse(responseCode = "404", description = "Elección no encontrada")
+  })
+  @GetMapping("/eleccion/{idEleccion}/dashboard")
+  public ResponseEntity<DashboardEleccionDTO> getDashboard(@PathVariable Long idEleccion) {
+    return ResponseEntity.ok(serviceEleccionJurado.getDashboard(idEleccion));
   }
 
   @Operation(summary = "Crear jurado manualmente para una elección")

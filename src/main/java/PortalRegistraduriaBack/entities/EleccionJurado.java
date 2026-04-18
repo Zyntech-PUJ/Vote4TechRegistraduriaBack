@@ -2,6 +2,7 @@ package PortalRegistraduriaBack.entities;
 
 import java.time.LocalDateTime;
 
+import PortalRegistraduriaBack.enums.EstadoEleccionJurado;
 import PortalRegistraduriaBack.enums.TipoJurado;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,6 +50,6 @@ public class EleccionJurado {
   @Column(name = "fecha_capacitacion", nullable = false)
   private LocalDateTime fechaCapacitacion;
 
-  @Column(name = "estado", nullable = false)
-  private Boolean asignado;
+  @Column(name = "estado", nullable = false, length = 32)
+  private EstadoEleccionJurado estado;
 }

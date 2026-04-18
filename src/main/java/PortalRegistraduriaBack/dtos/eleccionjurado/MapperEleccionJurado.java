@@ -44,7 +44,7 @@ public ResponseEleccionJuradoDTO toResponseDTO(EleccionJurado eleccionJurado) {
     dto.setTipoJurado(eleccionJurado.getTipoJurado().name());
     dto.setNumeroMesa(eleccionJurado.getNumeroMesa());
     dto.setFechaCapacitacion(eleccionJurado.getFechaCapacitacion());
-    dto.setAsignado(eleccionJurado.getAsignado());
+    dto.setEstado(eleccionJurado.getEstado().name());
 
     dto.setNombreCiudadano(eleccionJurado.getCiudadano().getNombre());
     dto.setGeneroCiudadano(eleccionJurado.getCiudadano().getGenero());

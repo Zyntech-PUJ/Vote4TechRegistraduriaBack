@@ -12,7 +12,7 @@ public class ResponseEleccionJuradoDTO {
   private String tipoJurado;
   private Integer numeroMesa;
   private LocalDateTime fechaCapacitacion;
-  private Boolean asignado;
+  private String estado;
   private String nombreCiudadano;
   private String generoCiudadano;
 }

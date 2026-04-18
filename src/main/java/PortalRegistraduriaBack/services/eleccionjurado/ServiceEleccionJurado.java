@@ -1,6 +1,5 @@
 package PortalRegistraduriaBack.services.eleccionjurado;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -8,12 +7,14 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import PortalRegistraduriaBack.dtos.dashboard.DashboardEleccionDTO;
 import PortalRegistraduriaBack.dtos.eleccionjurado.CreateEleccionJuradoDTO;
 import PortalRegistraduriaBack.dtos.eleccionjurado.MapperEleccionJurado;
 import PortalRegistraduriaBack.dtos.eleccionjurado.ResponseEleccionJuradoDTO;
 import PortalRegistraduriaBack.entities.Ciudadano;
 import PortalRegistraduriaBack.entities.Eleccion;
 import PortalRegistraduriaBack.entities.EleccionJurado;
+import PortalRegistraduriaBack.enums.EstadoEleccionJurado;
 import PortalRegistraduriaBack.enums.TipoJurado;
 import PortalRegistraduriaBack.exceptions.BusinessException;
 import PortalRegistraduriaBack.exceptions.ResourceNotFoundException;
@@ -68,7 +69,7 @@ public class ServiceEleccionJurado implements IServiceEleccionJurado {
     }
 
     EleccionJurado eleccionJurado = mapperEleccionJurado.toEntity(eleccionJuradoDTO, ciudadano, eleccion);
-    eleccionJurado.setAsignado(true);
+    eleccionJurado.setEstado(EstadoEleccionJurado.PENDIENTE);
 
     return mapperEleccionJurado.toResponseDTO(repositoryEleccionJurado.save(eleccionJurado));
   }
@@ -98,12 +99,33 @@ public class ServiceEleccionJurado implements IServiceEleccionJurado {
       asignacion.setEleccion(eleccion);
       asignacion.setTipoJurado(tipo);
       asignacion.setNumeroMesa(ThreadLocalRandom.current().nextInt(1, 33));
-      asignacion.setFechaCapacitacion(LocalDateTime.now());
-      asignacion.setAsignado(true);
+      asignacion.setFechaCapacitacion(eleccion.getFechaInicio().minusDays(10));
+      asignacion.setEstado(EstadoEleccionJurado.PENDIENTE);
       asignaciones.add(asignacion);
     }
 
     return mapperEleccionJurado.toResponseDTOs(repositoryEleccionJurado.saveAll(asignaciones));
+  }
+
+  @Override
+  public DashboardEleccionDTO getDashboard(Long idEleccion) {
+    Eleccion eleccion = repositoryEleccion.findById(idEleccion)
+        .orElseThrow(() -> new ResourceNotFoundException("La eleccion con id " + idEleccion + " no existe."));
+
+    long capacitados = repositoryEleccionJurado.countByEleccionAndEstado(idEleccion, EstadoEleccionJurado.CAPACITADO);
+    long pendientes = repositoryEleccionJurado.countByEleccionAndEstado(idEleccion, EstadoEleccionJurado.PENDIENTE);
+    long noPresentados = repositoryEleccionJurado.countByEleccionAndEstado(idEleccion,
+        EstadoEleccionJurado.NO_PRESENTADO);
+
+    DashboardEleccionDTO dto = new DashboardEleccionDTO();
+    dto.setIdEleccion(eleccion.getIdEleccion());
+    dto.setNombreEleccion(eleccion.getNombre());
+    dto.setTotalJurados(capacitados + pendientes + noPresentados);
+    dto.setCapacitados(capacitados);
+    dto.setPendientes(pendientes);
+    dto.setNoPresentados(noPresentados);
+
+    return dto;
   }
 
   private void validarEleccionExiste(Long idEleccion) {

@@ -13,6 +13,7 @@ import PortalRegistraduriaBack.entities.Eleccion;
 import PortalRegistraduriaBack.entities.EleccionJurado;
 import PortalRegistraduriaBack.entities.Registrador;
 import PortalRegistraduriaBack.enums.EstadoEleccion;
+import PortalRegistraduriaBack.enums.EstadoEleccionJurado;
 import PortalRegistraduriaBack.enums.TipoJurado;
 import PortalRegistraduriaBack.repositories.RepositoryCandidato;
 import PortalRegistraduriaBack.repositories.RepositoryCiudadano;
@@ -32,7 +33,6 @@ public class SeedConfig {
       RepositoryEleccionJurado repositoryEleccionJurado) {
 
     return args -> {
-      // Evita duplicados al reiniciar
       if (repositoryRegistrador.count() > 0) return;
 
       // ── 1. REGISTRADORES ─────────────────────────────────────────────
@@ -154,32 +154,64 @@ public class SeedConfig {
       System.out.println("✅ Candidatos cargados.");
 
       // ── 5. ELECCION_JURADO ───────────────────────────────────────────
-      // Solo se crean para e1 (la presidencial en CONFIGURACION)
-      // Los demás sorteos pueden generarse por endpoint
+      // Fecha de referencia: hoy es 17/04/2026
+      //
+      // CAPACITADO    → fechaCapacitacion hace más de 1 día (pasada)  + estado=CAPACITADO
+      // NO_PRESENTADO → fechaCapacitacion hace más de 1 día (pasada)  + estado=NO_PRESENTADO
+      // PENDIENTE     → fechaCapacitacion futura (aún no llega el día) + estado=PENDIENTE
+
+      LocalDateTime pasadaCapacitado    = LocalDateTime.of(2026, 4, 10, 9, 0);  // hace 7 días
+      LocalDateTime pasadaNoPresentado  = LocalDateTime.of(2026, 4, 14, 9, 0);  // hace 3 días
+      LocalDateTime futura              = LocalDateTime.of(2026, 5, 10, 9, 0);  // en el futuro
+
       repositoryEleccionJurado.saveAll(List.of(
+
+          // e1 - Presidencial: 2 capacitados, 2 no presentados, 2 pendientes
           EleccionJurado.builder()
-              .ciudadano(c1).eleccion(e1)
-              .tipoJurado(TipoJurado.URNA).numeroMesa(5)
-              .fechaCapacitacion(LocalDateTime.of(2026, 5, 10, 9, 0))
-              .asignado(true).build(),
+              .ciudadano(c1).eleccion(e1).tipoJurado(TipoJurado.URNA).numeroMesa(5)
+              .fechaCapacitacion(pasadaCapacitado)
+              .estado(EstadoEleccionJurado.CAPACITADO).build(),
 
           EleccionJurado.builder()
-              .ciudadano(c2).eleccion(e1)
-              .tipoJurado(TipoJurado.DOMICILIO).numeroMesa(12)
-              .fechaCapacitacion(LocalDateTime.of(2026, 5, 10, 9, 0))
-              .asignado(true).build(),
+              .ciudadano(c2).eleccion(e1).tipoJurado(TipoJurado.DOMICILIO).numeroMesa(12)
+              .fechaCapacitacion(pasadaCapacitado)
+              .estado(EstadoEleccionJurado.CAPACITADO).build(),
 
           EleccionJurado.builder()
-              .ciudadano(c3).eleccion(e1)
-              .tipoJurado(TipoJurado.URNA).numeroMesa(7)
-              .fechaCapacitacion(LocalDateTime.of(2026, 5, 10, 10, 0))
-              .asignado(false).build(),
+              .ciudadano(c3).eleccion(e1).tipoJurado(TipoJurado.URNA).numeroMesa(7)
+              .fechaCapacitacion(pasadaNoPresentado)
+              .estado(EstadoEleccionJurado.NO_PRESENTADO).build(),
 
           EleccionJurado.builder()
-              .ciudadano(c4).eleccion(e1)
-              .tipoJurado(TipoJurado.DOMICILIO).numeroMesa(20)
-              .fechaCapacitacion(LocalDateTime.of(2026, 5, 10, 10, 0))
-              .asignado(true).build()
+              .ciudadano(c4).eleccion(e1).tipoJurado(TipoJurado.DOMICILIO).numeroMesa(20)
+              .fechaCapacitacion(pasadaNoPresentado)
+              .estado(EstadoEleccionJurado.NO_PRESENTADO).build(),
+
+          EleccionJurado.builder()
+              .ciudadano(c5).eleccion(e1).tipoJurado(TipoJurado.URNA).numeroMesa(3)
+              .fechaCapacitacion(futura)
+              .estado(EstadoEleccionJurado.PENDIENTE).build(),
+
+          EleccionJurado.builder()
+              .ciudadano(c6).eleccion(e1).tipoJurado(TipoJurado.DOMICILIO).numeroMesa(18)
+              .fechaCapacitacion(futura)
+              .estado(EstadoEleccionJurado.PENDIENTE).build(),
+
+          // e2 - Legislativa: datos variados para el dashboard
+          EleccionJurado.builder()
+              .ciudadano(c1).eleccion(e2).tipoJurado(TipoJurado.URNA).numeroMesa(2)
+              .fechaCapacitacion(pasadaCapacitado)
+              .estado(EstadoEleccionJurado.CAPACITADO).build(),
+
+          EleccionJurado.builder()
+              .ciudadano(c3).eleccion(e2).tipoJurado(TipoJurado.DOMICILIO).numeroMesa(9)
+              .fechaCapacitacion(pasadaNoPresentado)
+              .estado(EstadoEleccionJurado.NO_PRESENTADO).build(),
+
+          EleccionJurado.builder()
+              .ciudadano(c5).eleccion(e2).tipoJurado(TipoJurado.URNA).numeroMesa(15)
+              .fechaCapacitacion(futura)
+              .estado(EstadoEleccionJurado.PENDIENTE).build()
       ));
 
       System.out.println("✅ EleccionJurado cargados.");
