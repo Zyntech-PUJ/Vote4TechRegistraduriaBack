@@ -219,6 +219,66 @@ public class SeedConfig {
           .nombre("Mariana Fuentes Calderón").cedula("1039900112")
           .genero("F").votoObligatorio(true).build());
 
+      Ciudadano c31 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Jerónimo Salcedo Prado").cedula("1060011223")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c32 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Simona Arias Velásquez").cedula("1081122334")
+          .genero("F").votoObligatorio(false).build());
+
+      Ciudadano c33 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Rodrigo Castaño Mejía").cedula("1022233445")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c34 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Catalina Mora Henao").cedula("1043344556")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c35 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Iván Darío Ospina Cano").cedula("1064455667")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c36 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Renata Guerrero Tobón").cedula("1085566778")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c37 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Mauricio Ríos Londoño").cedula("1026677889")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c38 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Alejandro Peñuela Duque").cedula("1047788990")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c39 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Margarita Rosa Pinto Uribe").cedula("1068899001")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c40 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Cristian Camilo Zapata Gil").cedula("1089900112")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c41 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Yesenia Paola Cano Ríos").cedula("1030011223")
+          .genero("F").votoObligatorio(false).build());
+
+      Ciudadano c42 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Harold Stiven Muñoz Bernal").cedula("1051122334")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c43 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Diana Marcela Varón Trujillo").cedula("1072233445")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c44 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Nelson Eduardo Jaramillo Soto").cedula("1013344556")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c45 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Viviana Liseth Agudelo Mora").cedula("1034455667")
+          .genero("F").votoObligatorio(true).build());
+
       System.out.println("✅ Ciudadanos cargados.");
 
       // ── 4. CANDIDATOS ────────────────────────────────────────────────
