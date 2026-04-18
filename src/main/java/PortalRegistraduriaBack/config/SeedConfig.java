@@ -33,7 +33,8 @@ public class SeedConfig {
       RepositoryEleccionJurado repositoryEleccionJurado) {
 
     return args -> {
-      if (repositoryRegistrador.count() > 0) return;
+      if (repositoryRegistrador.count() > 0)
+        return;
 
       // ── 1. REGISTRADORES ─────────────────────────────────────────────
       Registrador r1 = repositoryRegistrador.save(Registrador.builder()
@@ -122,6 +123,102 @@ public class SeedConfig {
           .nombre("María José Moreno Salcedo").cedula("1012938475")
           .genero("F").votoObligatorio(true).build());
 
+      Ciudadano c7 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Santiago Gómez Ramírez").cedula("1045678923")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c8 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Daniela Fernández Castro").cedula("1067891234")
+          .genero("F").votoObligatorio(false).build());
+
+      Ciudadano c9 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Sebastián Ortega Muñoz").cedula("1023456780")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c10 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Camila Díaz Quintero").cedula("1089012345")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c11 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Julián Pérez Aguilar").cedula("1011234567")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c12 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Isabella Soto Medina").cedula("1078901234")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c13 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Nicolás Herrera Jiménez").cedula("1034567890")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c14 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Sofía Castellanos Ávila").cedula("1056789012")
+          .genero("F").votoObligatorio(false).build());
+
+      Ciudadano c15 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Felipe Mendoza Restrepo").cedula("1000123456")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c16 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Manuela Rojas Ospina").cedula("1023459876")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c17 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("David Alejandro Cruz Patiño").cedula("1098765432")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c18 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Natalia Vergara Londoño").cedula("1043217654")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c19 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Luis Miguel Cárdenas Suárez").cedula("1065432198")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c20 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Paola Andrea Beltrán Niño").cedula("1087654321")
+          .genero("F").votoObligatorio(false).build());
+
+      Ciudadano c21 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Esteban Mora Gutiérrez").cedula("1009876543")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c22 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Alejandra Pineda Acosta").cedula("1031122334")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c23 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Mateo Salazar Bermúdez").cedula("1052233445")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c24 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Gabriela Lozano Cifuentes").cedula("1073344556")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c25 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Tomás Arbeláez Montes").cedula("1014455667")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c26 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Luciana Quintero Bejarano").cedula("1035566778")
+          .genero("F").votoObligatorio(false).build());
+
+      Ciudadano c27 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Samuel Ibáñez Parra").cedula("1056677889")
+          .genero("M").votoObligatorio(true).build());
+
+      Ciudadano c28 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Valeria Escobar Zapata").cedula("1077788990")
+          .genero("F").votoObligatorio(true).build());
+
+      Ciudadano c29 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Emilio Contreras Naranjo").cedula("1018899001")
+          .genero("M").votoObligatorio(false).build());
+
+      Ciudadano c30 = repositoryCiudadano.save(Ciudadano.builder()
+          .nombre("Mariana Fuentes Calderón").cedula("1039900112")
+          .genero("F").votoObligatorio(true).build());
+
       System.out.println("✅ Ciudadanos cargados.");
 
       // ── 4. CANDIDATOS ────────────────────────────────────────────────
@@ -148,21 +245,21 @@ public class SeedConfig {
               .nombre("Ingrid Betancourt Pulecio").numero("4")
               .fotoUrl("https://example.com/fotos/betancourt.jpg")
               .partidoLogoUrl("https://example.com/logos/verde_oxigeno.png")
-              .registrador(r2).build()
-      ));
+              .registrador(r2).build()));
 
       System.out.println("✅ Candidatos cargados.");
 
       // ── 5. ELECCION_JURADO ───────────────────────────────────────────
       // Fecha de referencia: hoy es 17/04/2026
       //
-      // CAPACITADO    → fechaCapacitacion hace más de 1 día (pasada)  + estado=CAPACITADO
-      // NO_PRESENTADO → fechaCapacitacion hace más de 1 día (pasada)  + estado=NO_PRESENTADO
-      // PENDIENTE     → fechaCapacitacion futura (aún no llega el día) + estado=PENDIENTE
+      // CAPACITADO → fechaCapacitacion hace más de 1 día (pasada) + estado=CAPACITADO
+      // NO_PRESENTADO → fechaCapacitacion hace más de 1 día (pasada) +
+      // estado=NO_PRESENTADO
+      // PENDIENTE → fechaCapacitacion futura (aún no llega el día) + estado=PENDIENTE
 
-      LocalDateTime pasadaCapacitado    = LocalDateTime.of(2026, 4, 10, 9, 0);  // hace 7 días
-      LocalDateTime pasadaNoPresentado  = LocalDateTime.of(2026, 4, 14, 9, 0);  // hace 3 días
-      LocalDateTime futura              = LocalDateTime.of(2026, 5, 10, 9, 0);  // en el futuro
+      LocalDateTime pasadaCapacitado = LocalDateTime.of(2026, 4, 10, 9, 0); // hace 7 días
+      LocalDateTime pasadaNoPresentado = LocalDateTime.of(2026, 4, 14, 9, 0); // hace 3 días
+      LocalDateTime futura = LocalDateTime.of(2026, 5, 10, 9, 0); // en el futuro
 
       repositoryEleccionJurado.saveAll(List.of(
 
@@ -211,8 +308,7 @@ public class SeedConfig {
           EleccionJurado.builder()
               .ciudadano(c5).eleccion(e2).tipoJurado(TipoJurado.URNA).numeroMesa(15)
               .fechaCapacitacion(futura)
-              .estado(EstadoEleccionJurado.PENDIENTE).build()
-      ));
+              .estado(EstadoEleccionJurado.PENDIENTE).build()));
 
       System.out.println("✅ EleccionJurado cargados.");
       System.out.println("🌱 Seed completado correctamente.");

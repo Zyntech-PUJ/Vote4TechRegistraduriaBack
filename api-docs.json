@@ -854,6 +854,48 @@
         }
       }
     },
+    "/eleccion-jurado/eleccion/{idEleccion}/dashboard": {
+      "get": {
+        "tags": [
+          "Eleccion Jurado"
+        ],
+        "summary": "Obtener estadísticas de jurados para el dashboard de una elección",
+        "operationId": "getDashboard",
+        "parameters": [
+          {
+            "name": "idEleccion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard consultado correctamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardEleccionDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Elección no encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardEleccionDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/candidato/candidatos": {
       "get": {
         "tags": [
@@ -1115,8 +1157,8 @@
             "type": "string",
             "format": "date-time"
           },
-          "asignado": {
-            "type": "boolean"
+          "estado": {
+            "type": "string"
           },
           "nombreCiudadano": {
             "type": "string"
@@ -1142,6 +1184,34 @@
             "type": "string"
           },
           "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DashboardEleccionDTO": {
+        "type": "object",
+        "properties": {
+          "idEleccion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombreEleccion": {
+            "type": "string"
+          },
+          "totalJurados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "capacitados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pendientes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "noPresentados": {
             "type": "integer",
             "format": "int64"
           }
