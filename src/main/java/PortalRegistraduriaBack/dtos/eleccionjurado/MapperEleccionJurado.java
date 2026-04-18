@@ -1,0 +1,61 @@
+package PortalRegistraduriaBack.dtos.eleccionjurado;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import PortalRegistraduriaBack.entities.Ciudadano;
+import PortalRegistraduriaBack.entities.Eleccion;
+import PortalRegistraduriaBack.entities.EleccionJurado;
+import PortalRegistraduriaBack.enums.TipoJurado;
+
+@Component
+public class MapperEleccionJurado {
+
+  public EleccionJurado toEntity(Ciudadano ciudadano, Eleccion eleccion) {
+    if (ciudadano == null || eleccion == null) return null;
+
+    EleccionJurado eleccionJurado = new EleccionJurado();
+    eleccionJurado.setCiudadano(ciudadano);
+    eleccionJurado.setEleccion(eleccion);
+
+    return eleccionJurado;
+  }
+
+  public EleccionJurado toEntity(CreateEleccionJuradoDTO dto, Ciudadano ciudadano, Eleccion eleccion) {
+    if (dto == null || ciudadano == null || eleccion == null) return null;
+
+    EleccionJurado eleccionJurado = new EleccionJurado();
+    eleccionJurado.setCiudadano(ciudadano);
+    eleccionJurado.setEleccion(eleccion);
+    eleccionJurado.setTipoJurado(TipoJurado.from(dto.getTipoJurado()));
+    eleccionJurado.setNumeroMesa(dto.getNumeroMesa());
+    eleccionJurado.setFechaCapacitacion(dto.getFechaCapacitacion());
+
+    return eleccionJurado;
+  }
+
+public ResponseEleccionJuradoDTO toResponseDTO(EleccionJurado eleccionJurado) {
+    if (eleccionJurado == null) return null;
+
+    ResponseEleccionJuradoDTO dto = new ResponseEleccionJuradoDTO();
+    dto.setIdAsignacionJurado(eleccionJurado.getIdAsignacionJurado());
+    dto.setNombreEleccion(eleccionJurado.getEleccion().getNombre());
+    dto.setTipoJurado(eleccionJurado.getTipoJurado().name());
+    dto.setNumeroMesa(eleccionJurado.getNumeroMesa());
+    dto.setFechaCapacitacion(eleccionJurado.getFechaCapacitacion());
+    dto.setEstado(eleccionJurado.getEstado().name());
+
+    dto.setNombreCiudadano(eleccionJurado.getCiudadano().getNombre());
+    dto.setGeneroCiudadano(eleccionJurado.getCiudadano().getGenero());
+
+    return dto;
+}
+
+  public List<ResponseEleccionJuradoDTO> toResponseDTOs(List<EleccionJurado> eleccionesJurados) {
+    return eleccionesJurados
+      .stream()
+      .map(this::toResponseDTO)
+      .toList();
+  }
+}
