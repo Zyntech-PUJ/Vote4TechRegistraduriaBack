@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import PortalRegistraduriaBack.entities.Candidato;
 import PortalRegistraduriaBack.entities.Ciudadano;
@@ -35,23 +36,32 @@ public class SeedConfig {
     return args -> {
       if (repositoryRegistrador.count() > 0)
         return;
+      // Al inicio del método seed, antes de cualquier save:
+      BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
       // ── 1. REGISTRADORES ─────────────────────────────────────────────
+      Registrador r0 = repositoryRegistrador.save(Registrador.builder()
+          .nombre("Usuario Test")
+          .usuario("test123")
+          .password(passwordEncoder.encode("12345")).build());
+
+      // Los demás registradores con passwords hasheadas también
       Registrador r1 = repositoryRegistrador.save(Registrador.builder()
           .nombre("Ana Patricia Suárez").usuario("asuarez")
-          .password("$2a$10$dummyhash1").build());
+          .password(passwordEncoder.encode("asuarez2026")).build());
 
       Registrador r2 = repositoryRegistrador.save(Registrador.builder()
           .nombre("Jorge Iván Medina").usuario("jmedina")
-          .password("$2a$10$dummyhash2").build());
+          .password(passwordEncoder.encode("jmedina2026")).build());
 
       Registrador r3 = repositoryRegistrador.save(Registrador.builder()
           .nombre("Lucía Fernanda Ríos").usuario("lrios")
-          .password("$2a$10$dummyhash3").build());
+          .password(passwordEncoder.encode("lrios2026")).build());
 
       Registrador r4 = repositoryRegistrador.save(Registrador.builder()
           .nombre("Camilo Ernesto Vega").usuario("cvega")
-          .password("$2a$10$dummyhash4").build());
+          .password(passwordEncoder.encode("cvega2026")).build());
+
 
       System.out.println("✅ Registradores cargados.");
 
@@ -285,26 +295,26 @@ public class SeedConfig {
       repositoryCandidato.saveAll(List.of(
           Candidato.builder()
               .nombre("Gustavo Petro Urrego").numero("1")
-              .fotoUrl("https://example.com/fotos/petro.jpg")
-              .partidoLogoUrl("https://example.com/logos/colombia_humana.png")
+              .fotoUrl("https://aiselfi.es/blog-images/ejemplos-fotos-profesionales.webp")
+              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
               .registrador(r1).build(),
 
           Candidato.builder()
               .nombre("Francia Márquez Mina").numero("2")
-              .fotoUrl("https://example.com/fotos/marquez.jpg")
-              .partidoLogoUrl("https://example.com/logos/mais.png")
+              .fotoUrl("https://img.freepik.com/fotos-premium/empresaria-bastante-caucasica-expresion-cara-complacida-sonrisa-encantadora-vestida-elegante-traje-formal-negro-mirando-sinceramente-camara-sobre-fondo-azul-claro-concepto-mujer-exitosa_95891-5567.jpg")
+              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
               .registrador(r1).build(),
 
           Candidato.builder()
               .nombre("Sergio Fajardo Valderrama").numero("3")
-              .fotoUrl("https://example.com/fotos/fajardo.jpg")
-              .partidoLogoUrl("https://example.com/logos/compromiso.png")
+              .fotoUrl("https://media.revistagq.com/photos/5ca5e76cc57c5b8a01c54363/1:1/w_800,h_800,c_limit/los_50_hombres_mas_elegantes_de_2015_440850226.jpg")
+              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
               .registrador(r2).build(),
 
           Candidato.builder()
               .nombre("Ingrid Betancourt Pulecio").numero("4")
-              .fotoUrl("https://example.com/fotos/betancourt.jpg")
-              .partidoLogoUrl("https://example.com/logos/verde_oxigeno.png")
+              .fotoUrl("https://png.pngtree.com/background/20230912/original/pngtree-young-woman-face-serious-people-woman-photo-picture-image_5054394.jpg")
+              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
               .registrador(r2).build()));
 
       System.out.println("✅ Candidatos cargados.");

@@ -3,9 +3,11 @@ package PortalRegistraduriaBack.services.registrador;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import PortalRegistraduriaBack.dtos.registrador.CreateRegistradorDTO;
+import PortalRegistraduriaBack.dtos.registrador.LoginRegistradorDTO;
 import PortalRegistraduriaBack.dtos.registrador.MapperRegistrador;
 import PortalRegistraduriaBack.dtos.registrador.ResponseRegistradorDTO;
 import PortalRegistraduriaBack.dtos.registrador.UpdateRegistradorDTO;
@@ -15,6 +17,8 @@ import PortalRegistraduriaBack.repositories.RepositoryRegistrador;
 
 @Service
 public class ServiceRegistrador implements IServiceRegistrador {
+
+  private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
   @Autowired
   RepositoryRegistrador repositoryRegistrador;
@@ -39,12 +43,16 @@ public class ServiceRegistrador implements IServiceRegistrador {
   public ResponseRegistradorDTO addRegistrador(CreateRegistradorDTO registradorDTO) {
     Registrador registrador = mapperRegistrador.toEntity(registradorDTO);
 
+    registrador.setPassword(passwordEncoder.encode(registradorDTO.getPassword())); // se encripta password
+
     return mapperRegistrador.toResponseDTO(repositoryRegistrador.save(registrador));
   }
 
   @Override
   public ResponseRegistradorDTO updateRegistrador(UpdateRegistradorDTO registradorDTO) {
     Registrador registradorUpdate = mapperRegistrador.toEntity(registradorDTO);
+
+    registradorUpdate.setPassword(passwordEncoder.encode(registradorDTO.getPassword())); // se encripta password
 
     return mapperRegistrador.toResponseDTO(repositoryRegistrador.save(registradorUpdate));
   }
@@ -56,7 +64,8 @@ public class ServiceRegistrador implements IServiceRegistrador {
 
     registrador.setNombre(registradorDTO.getNombre());
     registrador.setUsuario(registradorDTO.getUsuario());
-    registrador.setPassword(registradorDTO.getPassword());
+
+    registrador.setPassword(passwordEncoder.encode(registradorDTO.getPassword())); // se encripta password
 
     return mapperRegistrador.toResponseDTO(repositoryRegistrador.save(registrador));
   }
@@ -67,6 +76,19 @@ public class ServiceRegistrador implements IServiceRegistrador {
       throw new ResourceNotFoundException("Registrador no encontrado con id: " + id);
 
     repositoryRegistrador.deleteById(id);
+  }
+
+  @Override
+  public ResponseRegistradorDTO login(LoginRegistradorDTO loginDTO) {
+    Registrador registrador = repositoryRegistrador.findByUsuario(loginDTO.getUsuario());
+
+    if(registrador == null)
+      throw new ResourceNotFoundException("Registrador no encontrado con usuario: " + loginDTO.getUsuario());
+
+    if (!passwordEncoder.matches(loginDTO.getPassword(), registrador.getPassword()))
+      throw new ResourceNotFoundException("Contraseña incorrecta para usuario: " + loginDTO.getUsuario());
+
+    return mapperRegistrador.toResponseDTO(registrador);
   }
 
 }
