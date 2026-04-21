@@ -394,6 +394,47 @@
         }
       }
     },
+    "/registrador/login": {
+      "post": {
+        "tags": [
+          "Registrador"
+        ],
+        "summary": "Login de registrador",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRegistradorDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login exitoso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRegistradorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRegistradorDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/registrador/add": {
       "post": {
         "tags": [
@@ -1074,6 +1115,17 @@
           },
           "registrador": {
             "$ref": "#/components/schemas/ResponseRegistradorDTO"
+          }
+        }
+      },
+      "LoginRegistradorDTO": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
           }
         }
       },
