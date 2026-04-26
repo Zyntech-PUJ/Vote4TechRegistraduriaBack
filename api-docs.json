@@ -417,7 +417,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseRegistradorDTO"
+                  "type": "string"
                 }
               }
             }
@@ -427,7 +427,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseRegistradorDTO"
+                  "type": "string"
                 }
               }
             }
