@@ -15,7 +15,7 @@ public interface IServiceRegistrador {
   public ResponseRegistradorDTO addRegistrador(CreateRegistradorDTO registradorDTO);
   public ResponseRegistradorDTO updateRegistrador(UpdateRegistradorDTO registradorDTO);
   public ResponseRegistradorDTO updateRegistrador(Long id, UpdateRegistradorDTO registradorDTO);
-  public ResponseRegistradorDTO login(LoginRegistradorDTO loginDTO);
+  public String login(LoginRegistradorDTO loginDTO);
   public void deleteById(Long id);
 
 }

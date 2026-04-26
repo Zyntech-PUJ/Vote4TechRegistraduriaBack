@@ -3,6 +3,10 @@ package PortalRegistraduriaBack.services.registrador;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,7 @@ import PortalRegistraduriaBack.dtos.registrador.UpdateRegistradorDTO;
 import PortalRegistraduriaBack.entities.Registrador;
 import PortalRegistraduriaBack.exceptions.ResourceNotFoundException;
 import PortalRegistraduriaBack.repositories.RepositoryRegistrador;
+import PortalRegistraduriaBack.security.JWTGenerator;
 
 @Service
 public class ServiceRegistrador implements IServiceRegistrador {
@@ -25,6 +30,12 @@ public class ServiceRegistrador implements IServiceRegistrador {
 
   @Autowired
   MapperRegistrador mapperRegistrador;
+
+  @Autowired
+  private JWTGenerator jwtGenerator;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
 
   @Override
   public List<ResponseRegistradorDTO> findAll() {
@@ -79,16 +90,13 @@ public class ServiceRegistrador implements IServiceRegistrador {
   }
 
   @Override
-  public ResponseRegistradorDTO login(LoginRegistradorDTO loginDTO) {
-    Registrador registrador = repositoryRegistrador.findByUsuario(loginDTO.getUsuario());
+  public String login(LoginRegistradorDTO loginDTO) {
+    Authentication authentication = authenticationManager.authenticate(
+      new UsernamePasswordAuthenticationToken(loginDTO.getUsuario(), loginDTO.getPassword())
+    );
 
-    if(registrador == null)
-      throw new ResourceNotFoundException("Registrador no encontrado con usuario: " + loginDTO.getUsuario());
-
-    if (!passwordEncoder.matches(loginDTO.getPassword(), registrador.getPassword()))
-      throw new ResourceNotFoundException("Contraseña incorrecta para usuario: " + loginDTO.getUsuario());
-
-    return mapperRegistrador.toResponseDTO(registrador);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    return jwtGenerator.generateToken(authentication);
   }
 
 }

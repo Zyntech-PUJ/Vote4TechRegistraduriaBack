@@ -3,6 +3,7 @@ package PortalRegistraduriaBack.config;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,55 +14,178 @@ import PortalRegistraduriaBack.entities.Ciudadano;
 import PortalRegistraduriaBack.entities.Eleccion;
 import PortalRegistraduriaBack.entities.EleccionJurado;
 import PortalRegistraduriaBack.entities.Registrador;
+import PortalRegistraduriaBack.entities.Rol;
+import PortalRegistraduriaBack.entities.UsuarioEntity;
 import PortalRegistraduriaBack.enums.EstadoEleccion;
 import PortalRegistraduriaBack.enums.EstadoEleccionJurado;
 import PortalRegistraduriaBack.enums.TipoJurado;
+import PortalRegistraduriaBack.enums.TipoRol;
 import PortalRegistraduriaBack.repositories.RepositoryCandidato;
 import PortalRegistraduriaBack.repositories.RepositoryCiudadano;
 import PortalRegistraduriaBack.repositories.RepositoryEleccion;
 import PortalRegistraduriaBack.repositories.RepositoryEleccionJurado;
 import PortalRegistraduriaBack.repositories.RepositoryRegistrador;
+import PortalRegistraduriaBack.repositories.RepositoryRol;
+import PortalRegistraduriaBack.repositories.RepositoryUsuarioEntity;
 
 @Configuration
 public class SeedConfig {
 
+  @Autowired
+  private RepositoryRegistrador repositoryRegistrador;
+
+  @Autowired
+  private RepositoryEleccion repositoryEleccion;
+
+  @Autowired
+  private RepositoryCiudadano repositoryCiudadano;
+
+  @Autowired
+  private RepositoryCandidato repositoryCandidato;
+
+  @Autowired
+  private RepositoryEleccionJurado repositoryEleccionJurado;
+
+  @Autowired
+  private RepositoryRol repositoryRol;
+
+  @Autowired
+  private RepositoryUsuarioEntity repositoryUsuarioEntity;
+
   @Bean
-  public CommandLineRunner seed(
-      RepositoryRegistrador repositoryRegistrador,
-      RepositoryEleccion repositoryEleccion,
-      RepositoryCiudadano repositoryCiudadano,
-      RepositoryCandidato repositoryCandidato,
-      RepositoryEleccionJurado repositoryEleccionJurado) {
+  public CommandLineRunner seed() {
 
     return args -> {
+
+      // 0. Se cargan roles
+      if(repositoryRol.count() == 0) {
+        repositoryRol.saveAll(
+          List.of(
+            new Rol(TipoRol.REGISTRADOR.name())
+          )
+        );
+      }
+
       if (repositoryRegistrador.count() > 0)
         return;
+
       // Al inicio del método seed, antes de cualquier save:
       BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
       // ── 1. REGISTRADORES ─────────────────────────────────────────────
-      Registrador r0 = repositoryRegistrador.save(Registrador.builder()
-          .nombre("Usuario Test")
-          .usuario("test123")
-          .password(passwordEncoder.encode("12345")).build());
+      Registrador r0 = Registrador.builder()
+        .nombre("Usuario Test")
+        .usuario("test123")
+        .password(passwordEncoder.encode("12345"))
+        .build();
 
       // Los demás registradores con passwords hasheadas también
-      Registrador r1 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r1 = Registrador.builder()
           .nombre("Ana Patricia Suárez").usuario("asuarez")
-          .password(passwordEncoder.encode("asuarez2026")).build());
+          .password(passwordEncoder.encode("asuarez2026")).build();
 
-      Registrador r2 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r2 = Registrador.builder()
           .nombre("Jorge Iván Medina").usuario("jmedina")
-          .password(passwordEncoder.encode("jmedina2026")).build());
+          .password(passwordEncoder.encode("jmedina2026")).build();
 
-      Registrador r3 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r3 = Registrador.builder()
           .nombre("Lucía Fernanda Ríos").usuario("lrios")
-          .password(passwordEncoder.encode("lrios2026")).build());
+          .password(passwordEncoder.encode("lrios2026")).build();
 
-      Registrador r4 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r4 = Registrador.builder()
           .nombre("Camilo Ernesto Vega").usuario("cvega")
-          .password(passwordEncoder.encode("cvega2026")).build());
+          .password(passwordEncoder.encode("cvega2026")).build();
 
+
+      UsuarioEntity ue0 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r0.getUsuario())
+        .password(r0.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue0);
+
+      r0.setUsuarioEntity(ue0);
+      repositoryRegistrador.save(r0);
+
+      UsuarioEntity ue1 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r1.getUsuario())
+        .password(r1.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue1);
+
+      r1.setUsuarioEntity(ue1);
+      repositoryRegistrador.save(r1);
+
+      UsuarioEntity ue2 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r2.getUsuario())
+        .password(r2.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue2);
+
+      r2.setUsuarioEntity(ue2);
+      repositoryRegistrador.save(r2);
+
+      UsuarioEntity ue3 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r3.getUsuario())
+        .password(r3.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue3);
+
+      r3.setUsuarioEntity(ue3);
+      repositoryRegistrador.save(r3);
+
+      UsuarioEntity ue4 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r4.getUsuario())
+        .password(r4.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue4);
+
+      r4.setUsuarioEntity(ue4);
+      repositoryRegistrador.save(r4);
 
       System.out.println("✅ Registradores cargados.");
 
