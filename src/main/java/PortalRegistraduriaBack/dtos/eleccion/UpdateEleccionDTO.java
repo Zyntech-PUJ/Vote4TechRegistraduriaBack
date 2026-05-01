@@ -2,6 +2,7 @@ package PortalRegistraduriaBack.dtos.eleccion;
 
 import java.time.LocalDateTime;
 
+import PortalRegistraduriaBack.enums.TipoEleccion;
 import lombok.Data;
 
 @Data
@@ -11,8 +12,8 @@ public class UpdateEleccionDTO {
   private String nombre;
   private LocalDateTime fechaInicio;
   private LocalDateTime fechaFinalizacion;
-  private String tipo;
+  private TipoEleccion tipo;
   private Boolean listaAbierta;
-  private Long idRegistrador;  
+  private Long idAdministradorElectoral;  
 
 }

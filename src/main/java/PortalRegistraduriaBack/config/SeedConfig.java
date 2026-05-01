@@ -3,6 +3,7 @@ package PortalRegistraduriaBack.config;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,101 +11,304 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import PortalRegistraduriaBack.entities.Candidato;
 import PortalRegistraduriaBack.entities.Ciudadano;
+import PortalRegistraduriaBack.entities.AdministradorElectoral;
+import PortalRegistraduriaBack.entities.ConsejoNacional;
 import PortalRegistraduriaBack.entities.Eleccion;
 import PortalRegistraduriaBack.entities.EleccionJurado;
+import PortalRegistraduriaBack.entities.Lista;
+import PortalRegistraduriaBack.entities.Partido;
 import PortalRegistraduriaBack.entities.Registrador;
+import PortalRegistraduriaBack.entities.Rol;
+import PortalRegistraduriaBack.entities.UsuarioEntity;
 import PortalRegistraduriaBack.enums.EstadoEleccion;
 import PortalRegistraduriaBack.enums.EstadoEleccionJurado;
+import PortalRegistraduriaBack.enums.TipoEleccion;
 import PortalRegistraduriaBack.enums.TipoJurado;
+import PortalRegistraduriaBack.enums.TipoLista;
+import PortalRegistraduriaBack.enums.TipoRol;
 import PortalRegistraduriaBack.repositories.RepositoryCandidato;
 import PortalRegistraduriaBack.repositories.RepositoryCiudadano;
+import PortalRegistraduriaBack.repositories.RepositoryAdministradorElectoral;
+import PortalRegistraduriaBack.repositories.RepositoryConsejoNacional;
 import PortalRegistraduriaBack.repositories.RepositoryEleccion;
 import PortalRegistraduriaBack.repositories.RepositoryEleccionJurado;
+import PortalRegistraduriaBack.repositories.RepositoryLista;
+import PortalRegistraduriaBack.repositories.RepositoryPartido;
 import PortalRegistraduriaBack.repositories.RepositoryRegistrador;
+import PortalRegistraduriaBack.repositories.RepositoryRol;
+import PortalRegistraduriaBack.repositories.RepositoryUsuarioEntity;
 
 @Configuration
 public class SeedConfig {
 
+  @Autowired
+  private RepositoryPartido repositoryPartido;
+
+  @Autowired
+  private RepositoryRegistrador repositoryRegistrador;
+
+  @Autowired
+  private RepositoryAdministradorElectoral repositoryAdministradorElectoral;
+
+  @Autowired
+  private RepositoryConsejoNacional repositoryConsejoNacional;
+
+  @Autowired
+  private RepositoryEleccion repositoryEleccion;
+
+  @Autowired
+  private RepositoryCiudadano repositoryCiudadano;
+
+  @Autowired
+  private RepositoryCandidato repositoryCandidato;
+
+  @Autowired
+  private RepositoryLista repositoryLista;
+
+  @Autowired
+  private RepositoryEleccionJurado repositoryEleccionJurado;
+
+  @Autowired
+  private RepositoryRol repositoryRol;
+
+  @Autowired
+  private RepositoryUsuarioEntity repositoryUsuarioEntity;
+
   @Bean
-  public CommandLineRunner seed(
-      RepositoryRegistrador repositoryRegistrador,
-      RepositoryEleccion repositoryEleccion,
-      RepositoryCiudadano repositoryCiudadano,
-      RepositoryCandidato repositoryCandidato,
-      RepositoryEleccionJurado repositoryEleccionJurado) {
+  public CommandLineRunner seed() {
 
     return args -> {
-      if (repositoryRegistrador.count() > 0)
-        return;
-      // Al inicio del método seed, antes de cualquier save:
       BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+      // 0. Se cargan roles
+      if(repositoryRol.count() == 0) {
+        repositoryRol.saveAll(
+          List.of(
+            new Rol(TipoRol.REGISTRADOR.name()),
+            new Rol(TipoRol.ADMINISTRADOR_ELECTORAL.name()),
+            new Rol(TipoRol.CONSEJO_NACIONAL.name())
+          )
+        );
+      }
+
+      AdministradorElectoral administradorElectoral;
+      if (repositoryAdministradorElectoral.count() == 0) {
+        administradorElectoral = AdministradorElectoral.builder()
+            .usuario("adminElectoral")
+            .password(passwordEncoder.encode("admin2026"))
+            .build();
+
+        UsuarioEntity usuarioEntityAdministrador = repositoryUsuarioEntity.save(
+            UsuarioEntity.builder()
+                .usuario(administradorElectoral.getUsuario())
+                .password(administradorElectoral.getPassword())
+                .roles(
+                    List.of(
+                        repositoryRol
+                          .findByNombre(TipoRol.ADMINISTRADOR_ELECTORAL.name())
+                          .orElse(new Rol(TipoRol.ADMINISTRADOR_ELECTORAL.name()))
+                    )
+                )
+                .build()
+        );
+
+        administradorElectoral.setUsuarioEntity(usuarioEntityAdministrador);
+        administradorElectoral = repositoryAdministradorElectoral.save(administradorElectoral);
+      } else {
+        administradorElectoral = repositoryAdministradorElectoral.findAll().get(0);
+      }
+
+      if (repositoryConsejoNacional.count() == 0) {
+        ConsejoNacional consejoNacional = ConsejoNacional.builder()
+            .username("consejoNacional")
+            .password(passwordEncoder.encode("consejo2026"))
+            .build();
+
+        UsuarioEntity usuarioEntityConsejo = repositoryUsuarioEntity.save(
+            UsuarioEntity.builder()
+                .usuario(consejoNacional.getUsername())
+                .password(consejoNacional.getPassword())
+                .roles(
+                    List.of(
+                        repositoryRol
+                            .findByNombre(TipoRol.CONSEJO_NACIONAL.name())
+                            .orElse(new Rol(TipoRol.CONSEJO_NACIONAL.name()))
+                    )
+                )
+                .build()
+        );
+
+        consejoNacional.setUsuarioEntity(usuarioEntityConsejo);
+        repositoryConsejoNacional.save(consejoNacional);
+      }
+
+      if (repositoryRegistrador.count() > 0)
+        return;
+
       // ── 1. REGISTRADORES ─────────────────────────────────────────────
-      Registrador r0 = repositoryRegistrador.save(Registrador.builder()
-          .nombre("Usuario Test")
-          .usuario("test123")
-          .password(passwordEncoder.encode("12345")).build());
+      Registrador r0 = Registrador.builder()
+        .nombre("Usuario Test")
+        .usuario("test123")
+        .password(passwordEncoder.encode("12345"))
+        .build();
 
       // Los demás registradores con passwords hasheadas también
-      Registrador r1 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r1 = Registrador.builder()
           .nombre("Ana Patricia Suárez").usuario("asuarez")
-          .password(passwordEncoder.encode("asuarez2026")).build());
+          .password(passwordEncoder.encode("asuarez2026")).build();
 
-      Registrador r2 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r2 = Registrador.builder()
           .nombre("Jorge Iván Medina").usuario("jmedina")
-          .password(passwordEncoder.encode("jmedina2026")).build());
+          .password(passwordEncoder.encode("jmedina2026")).build();
 
-      Registrador r3 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r3 = Registrador.builder()
           .nombre("Lucía Fernanda Ríos").usuario("lrios")
-          .password(passwordEncoder.encode("lrios2026")).build());
+          .password(passwordEncoder.encode("lrios2026")).build();
 
-      Registrador r4 = repositoryRegistrador.save(Registrador.builder()
+      Registrador r4 = Registrador.builder()
           .nombre("Camilo Ernesto Vega").usuario("cvega")
-          .password(passwordEncoder.encode("cvega2026")).build());
+          .password(passwordEncoder.encode("cvega2026")).build();
 
+      repositoryRegistrador.saveAll(List.of(r1,r2,r3,r4));
+
+      // -- 2. AdministradorElectoral -------
+
+      UsuarioEntity ue0 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r0.getUsuario())
+        .password(r0.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue0);
+
+      r0.setUsuarioEntity(ue0);
+      repositoryRegistrador.save(r0);
+
+      UsuarioEntity ue1 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r1.getUsuario())
+        .password(r1.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue1);
+
+      r1.setUsuarioEntity(ue1);
+      repositoryRegistrador.save(r1);
+
+      UsuarioEntity ue2 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r2.getUsuario())
+        .password(r2.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue2);
+
+      r2.setUsuarioEntity(ue2);
+      repositoryRegistrador.save(r2);
+
+      UsuarioEntity ue3 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r3.getUsuario())
+        .password(r3.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue3);
+
+      r3.setUsuarioEntity(ue3);
+      repositoryRegistrador.save(r3);
+
+      UsuarioEntity ue4 = repositoryUsuarioEntity.save(
+        UsuarioEntity.builder()
+        .usuario(r4.getUsuario())
+        .password(r4.getPassword())
+        .roles(
+          List.of(
+            repositoryRol
+            .findByNombre(TipoRol.REGISTRADOR.name())
+            .orElse(new Rol(TipoRol.REGISTRADOR.name()))
+          )
+        )
+        .build()
+      );
+      repositoryUsuarioEntity.save(ue4);
+
+      r4.setUsuarioEntity(ue4);
+      repositoryRegistrador.save(r4);
 
       System.out.println("✅ Registradores cargados.");
 
       // ── 2. ELECCIONES ────────────────────────────────────────────────
       Eleccion e1 = repositoryEleccion.save(Eleccion.builder()
           .nombre("Elecciones Presidenciales 2026")
-          .tipo("PRESIDENCIAL")
+          .tipo(TipoEleccion.PRESIDENCIAL)
           .fechaInicio(LocalDateTime.of(2026, 5, 25, 8, 0))
           .fechaFinalizacion(LocalDateTime.of(2026, 5, 25, 16, 0))
           .fechaCreacion(LocalDateTime.now())
           .listaAbierta(false)
           .estado(EstadoEleccion.CONFIGURACION)
-          .registrador(r1).build());
+          .administradorElectoral(administradorElectoral)
+          .build());
 
       Eleccion e2 = repositoryEleccion.save(Eleccion.builder()
           .nombre("Elecciones Legislativas 2026")
-          .tipo("LEGISLATIVA")
+          .tipo(TipoEleccion.LEGISLATIVA)
           .fechaInicio(LocalDateTime.of(2026, 3, 13, 8, 0))
           .fechaFinalizacion(LocalDateTime.of(2026, 3, 13, 16, 0))
           .fechaCreacion(LocalDateTime.now())
           .listaAbierta(true)
           .estado(EstadoEleccion.LANZADA)
-          .registrador(r2).build());
+          .administradorElectoral(administradorElectoral)
+          .build());
 
       Eleccion e3 = repositoryEleccion.save(Eleccion.builder()
           .nombre("Consulta Interpartidista 2026")
-          .tipo("CONSULTA")
+          .tipo(TipoEleccion.CONSULTA)
           .fechaInicio(LocalDateTime.of(2026, 2, 22, 8, 0))
           .fechaFinalizacion(LocalDateTime.of(2026, 2, 22, 16, 0))
           .fechaCreacion(LocalDateTime.now())
           .listaAbierta(false)
           .estado(EstadoEleccion.FINALIZADA)
-          .registrador(r3).build());
+          .administradorElectoral(administradorElectoral)
+          .build());
 
       Eleccion e4 = repositoryEleccion.save(Eleccion.builder()
           .nombre("Elecciones Regionales Palmira 2026")
-          .tipo("LEGISLATIVA")
+          .tipo(TipoEleccion.LEGISLATIVA)
           .fechaInicio(LocalDateTime.of(2026, 10, 27, 8, 0))
           .fechaFinalizacion(LocalDateTime.of(2026, 10, 27, 16, 0))
           .fechaCreacion(LocalDateTime.now())
           .listaAbierta(true)
           .estado(EstadoEleccion.CONFIGURACION)
-          .registrador(r4).build());
+          .administradorElectoral(administradorElectoral)
+          .build());
 
       System.out.println("✅ Elecciones cargadas.");
 
@@ -291,31 +495,73 @@ public class SeedConfig {
 
       System.out.println("✅ Ciudadanos cargados.");
 
+      // -- 4.5 PARTIDOS -------
+      Partido p1 = Partido.builder()
+        .nombre("Centro Democratico")
+        .sigla("CD")
+        .fechaCreacion(LocalDateTime.now())
+        .logoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
+        .build();
+
+      repositoryPartido.save(p1);
+
+      // -- 4.6 LISTAS -------
+      Lista l1 = repositoryLista.save(
+        Lista.builder()
+          .tipo(TipoLista.CERRADA)
+          .fechaCreacion(LocalDateTime.now())
+          .fechaModificacion(LocalDateTime.now())
+          .eleccion(e1)
+          .build()
+      );
+
+      Lista l2 = repositoryLista.save(
+        Lista.builder()
+          .tipo(TipoLista.CERRADA)
+          .fechaCreacion(LocalDateTime.now())
+          .fechaModificacion(LocalDateTime.now())
+          .eleccion(e2)
+          .build()
+      );
+
       // ── 4. CANDIDATOS ────────────────────────────────────────────────
-      repositoryCandidato.saveAll(List.of(
-          Candidato.builder()
+      Candidato cn1 = Candidato.builder()
               .nombre("Gustavo Petro Urrego").numero("1")
               .fotoUrl("https://aiselfi.es/blog-images/ejemplos-fotos-profesionales.webp")
-              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
-              .registrador(r1).build(),
+              .activo(true)
+              .registrador(r1)
+              .lista(l1)
+              .partido(p1)
+              .build();
 
-          Candidato.builder()
+      Candidato cn2 = Candidato.builder()
               .nombre("Francia Márquez Mina").numero("2")
               .fotoUrl("https://img.freepik.com/fotos-premium/empresaria-bastante-caucasica-expresion-cara-complacida-sonrisa-encantadora-vestida-elegante-traje-formal-negro-mirando-sinceramente-camara-sobre-fondo-azul-claro-concepto-mujer-exitosa_95891-5567.jpg")
-              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
-              .registrador(r1).build(),
+              .activo(true)
+              .registrador(r1)
+              .lista(l1)
+              .partido(p1)
+              .build();
 
-          Candidato.builder()
+      Candidato cn3 = Candidato.builder()
               .nombre("Sergio Fajardo Valderrama").numero("3")
               .fotoUrl("https://media.revistagq.com/photos/5ca5e76cc57c5b8a01c54363/1:1/w_800,h_800,c_limit/los_50_hombres_mas_elegantes_de_2015_440850226.jpg")
-              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
-              .registrador(r2).build(),
+              .activo(true)
+              .registrador(r1)
+              .lista(l2)
+              .partido(p1)
+              .build();
 
-          Candidato.builder()
+      Candidato cn4 = Candidato.builder()
               .nombre("Ingrid Betancourt Pulecio").numero("4")
               .fotoUrl("https://png.pngtree.com/background/20230912/original/pngtree-young-woman-face-serious-people-woman-photo-picture-image_5054394.jpg")
-              .partidoLogoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
-              .registrador(r2).build()));
+              .activo(true)
+              .registrador(r1)
+              .lista(l2)
+              .partido(p1)
+              .build();
+
+      repositoryCandidato.saveAll(List.of(cn1, cn2, cn3, cn4));
 
       System.out.println("✅ Candidatos cargados.");
 

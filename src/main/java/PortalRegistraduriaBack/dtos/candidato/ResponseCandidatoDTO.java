@@ -1,6 +1,5 @@
 package PortalRegistraduriaBack.dtos.candidato;
 
-import PortalRegistraduriaBack.dtos.registrador.ResponseRegistradorDTO;
 import lombok.Data;
 
 @Data
@@ -10,7 +9,9 @@ public class ResponseCandidatoDTO {
   private String nombre;
   private String numero;
   private String fotoUrl;
-  private String partidoLogoUrl;
-  private ResponseRegistradorDTO registrador;
+  private Boolean activo;
+  private Long idLista;
+  private Long idPartido;
+  private Long idRegistrador;
   
 }

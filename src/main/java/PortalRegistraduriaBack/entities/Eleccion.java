@@ -1,8 +1,11 @@
 package PortalRegistraduriaBack.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import PortalRegistraduriaBack.enums.EstadoEleccion;
+import PortalRegistraduriaBack.enums.TipoEleccion;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,11 +47,9 @@ public class Eleccion {
   @Column(name = "fecha_creacion", nullable = false, updatable = false)
   private LocalDateTime fechaCreacion;
 
-  /**
-   * Tipos permitidos: PRESIDENCIAL, LEGISLATIVA, CONSULTA
-   */
+  @Enumerated(EnumType.STRING)
   @Column(name = "tipo", nullable = false, length = 32)
-  private String tipo;
+  private TipoEleccion tipo;
 
   @Column(name = "lista_abierta", nullable = false)
   private Boolean listaAbierta;
@@ -57,7 +59,10 @@ public class Eleccion {
   private EstadoEleccion estado;
 
   @ManyToOne
-  @JoinColumn(name = "id_registrador", referencedColumnName = "id_registrador", nullable = false)
-  private Registrador registrador;
+  @JoinColumn(name = "id_administrador_electoral", referencedColumnName = "id_administrador_electoral", nullable = false)
+  private AdministradorElectoral administradorElectoral;
+
+  @OneToMany(mappedBy = "eleccion", cascade = CascadeType.ALL)
+  private List<Lista> listas;
 
 }

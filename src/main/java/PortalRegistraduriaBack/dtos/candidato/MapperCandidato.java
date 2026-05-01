@@ -2,17 +2,12 @@ package PortalRegistraduriaBack.dtos.candidato;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import PortalRegistraduriaBack.dtos.registrador.MapperRegistrador;
 import PortalRegistraduriaBack.entities.Candidato;
 
 @Component
 public class MapperCandidato {
-  
-  @Autowired
-  MapperRegistrador mapperRegistrador;
 
   public Candidato toEntity(CreateCandidatoDTO dto) {
     if (dto == null) return null;
@@ -21,7 +16,7 @@ public class MapperCandidato {
     candidato.setNombre(dto.getNombre());
     candidato.setNumero(dto.getNumero());
     candidato.setFotoUrl(dto.getFotoUrl());
-    candidato.setPartidoLogoUrl(dto.getPartidoLogoUrl());
+    candidato.setActivo(dto.getActivo());
 
     return candidato;
   }
@@ -34,7 +29,7 @@ public class MapperCandidato {
     candidato.setNombre(dto.getNombre());
     candidato.setNumero(dto.getNumero());
     candidato.setFotoUrl(dto.getFotoUrl());
-    candidato.setPartidoLogoUrl(dto.getPartidoLogoUrl());
+    candidato.setActivo(dto.getActivo());
 
     return candidato;
   }
@@ -47,8 +42,10 @@ public class MapperCandidato {
     dto.setNombre(candidato.getNombre());
     dto.setNumero(candidato.getNumero());
     dto.setFotoUrl(candidato.getFotoUrl());
-    dto.setPartidoLogoUrl(candidato.getPartidoLogoUrl());
-    dto.setRegistrador(mapperRegistrador.toResponseDTO(candidato.getRegistrador()));
+    dto.setActivo(candidato.getActivo());
+    dto.setIdLista(candidato.getLista() != null ? candidato.getLista().getIdLista() : null);
+    dto.setIdPartido(candidato.getPartido() != null ? candidato.getPartido().getIdPartido() : null);
+    dto.setIdRegistrador(candidato.getRegistrador() != null ? candidato.getRegistrador().getIdRegistrador() : null);
 
     return dto;
   }

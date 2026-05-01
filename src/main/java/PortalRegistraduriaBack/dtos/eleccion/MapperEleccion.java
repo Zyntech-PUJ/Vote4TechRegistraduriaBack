@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import PortalRegistraduriaBack.dtos.registrador.MapperRegistrador;
+import PortalRegistraduriaBack.dtos.administradorelectoral.MapperAdministradorElectoral;
 import PortalRegistraduriaBack.entities.Eleccion;
 
 
@@ -13,7 +13,7 @@ import PortalRegistraduriaBack.entities.Eleccion;
 public class MapperEleccion {
   
   @Autowired
-  MapperRegistrador mapperRegistrador;
+  MapperAdministradorElectoral mapperAdministradorElectoral;
   
   public Eleccion toEntity(CreateEleccionDTO dto) {
     if (dto == null) return null;
@@ -54,7 +54,9 @@ public class MapperEleccion {
     dto.setTipo(eleccion.getTipo());
     dto.setListaAbierta(eleccion.getListaAbierta());
     dto.setEstado(eleccion.getEstado());
-    dto.setRegistrador(mapperRegistrador.toResponseDTO(eleccion.getRegistrador()));
+    dto.setAdministradorElectoral(
+      mapperAdministradorElectoral.toResponseDTO(eleccion.getAdministradorElectoral())
+    );
 
     return dto; 
   }
