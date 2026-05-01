@@ -33,16 +33,26 @@ public class SecurityConfig {
       .authorizeHttpRequests(requests ->
         requests
 // ------------------------- SECTION .permitAll() -------------------------
-          .requestMatchers("/registrador/login").permitAll()
-          .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-// ------------------------- END SECTION .permitAll() -------------------------
-// ------------------------- SECTION .hasAuthority() -------------------------
 
-          .requestMatchers("/registrador/**").hasAuthority(TipoRol.REGISTRADOR.name())
-          .requestMatchers("/eleccion-jurado/**").hasAuthority(TipoRol.REGISTRADOR.name())
-          .requestMatchers("/eleccion/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers("/registrador/login").permitAll()
+          .requestMatchers("/administrador-electoral/login").permitAll()
+          .requestMatchers("/consejo-nacional/login").permitAll()
+          .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+
+// ------------------------- END SECTION .permitAll() -------------------------
+// ------------------------- SECTION .hasAuthority(REGISTRADOR) -------------------------
+
           .requestMatchers("/candidato/**").hasAuthority(TipoRol.REGISTRADOR.name())
-// ------------------------- END SECTION .hasAuthority() -------------------------
+          .requestMatchers("/partido/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers("/registrador/**").hasAuthority(TipoRol.REGISTRADOR.name())
+
+// ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
+// ------------------------- SECTION .hasAuthority(REGISTRADOR) -------------------------
+
+          .requestMatchers("/eleccion/**").hasAuthority(TipoRol.ADMINISTRADOR_ELECTORAL.name())
+          .requestMatchers("/administrador-electoral/**").hasAuthority(TipoRol.ADMINISTRADOR_ELECTORAL.name())
+
+// ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
           .anyRequest().permitAll()
       )
       .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));

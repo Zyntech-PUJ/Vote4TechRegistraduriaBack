@@ -34,10 +34,19 @@ public class Candidato {
   @Column(name = "foto_url", nullable = false)
   private String fotoUrl;
 
-  @Column(name = "partido_logo_url", nullable = false)
-  private String partidoLogoUrl;
+  @Column(name = "activo", nullable = false)
+  private Boolean activo;
 
   @ManyToOne
   @JoinColumn(name = "id_registrador", referencedColumnName = "id_registrador", nullable = false)
   private Registrador registrador;
+
+  @ManyToOne
+  @JoinColumn(name = "id_lista", referencedColumnName = "id_lista", nullable = false)
+  private Lista lista;
+
+  @ManyToOne
+  @JoinColumn(name = "id_partido", referencedColumnName = "id_partido", nullable = false)
+  private Partido partido;
+
 }

@@ -1,5 +1,7 @@
 package PortalRegistraduriaBack.enums;
 
 public enum TipoRol {
-  REGISTRADOR
+  REGISTRADOR,
+  ADMINISTRADOR_ELECTORAL,
+  CONSEJO_NACIONAL
 }

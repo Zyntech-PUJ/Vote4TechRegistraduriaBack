@@ -2,8 +2,9 @@ package PortalRegistraduriaBack.dtos.eleccion;
 
 import java.time.LocalDateTime;
 
-import PortalRegistraduriaBack.dtos.registrador.ResponseRegistradorDTO;
+import PortalRegistraduriaBack.dtos.administradorelectoral.ResponseAdministradorElectoralDTO;
 import PortalRegistraduriaBack.enums.EstadoEleccion;
+import PortalRegistraduriaBack.enums.TipoEleccion;
 import lombok.Data;
 
 @Data
@@ -14,9 +15,9 @@ public class ResponseEleccionDTO {
   private LocalDateTime fechaInicio;
   private LocalDateTime fechaFinalizacion;
   private LocalDateTime fechaCreacion;
-  private String tipo;
+  private TipoEleccion tipo;
   private Boolean listaAbierta;
   private EstadoEleccion estado;
-  private ResponseRegistradorDTO registrador; 
+  private ResponseAdministradorElectoralDTO administradorElectoral; 
 
 }

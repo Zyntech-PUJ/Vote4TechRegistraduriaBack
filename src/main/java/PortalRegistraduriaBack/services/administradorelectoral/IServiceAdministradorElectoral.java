@@ -1,0 +1,20 @@
+package PortalRegistraduriaBack.services.administradorelectoral;
+
+import java.util.List;
+
+import PortalRegistraduriaBack.dtos.administradorelectoral.CreateAdministradorElectoralDTO;
+import PortalRegistraduriaBack.dtos.administradorelectoral.LoginAdministradorElectoralDTO;
+import PortalRegistraduriaBack.dtos.administradorelectoral.ResponseAdministradorElectoralDTO;
+import PortalRegistraduriaBack.dtos.administradorelectoral.UpdateAdministradorElectoralDTO;
+
+public interface IServiceAdministradorElectoral {
+
+  public List<ResponseAdministradorElectoralDTO> findAll();
+  public ResponseAdministradorElectoralDTO findById(Long id);
+  public ResponseAdministradorElectoralDTO addAdministradorElectoral(CreateAdministradorElectoralDTO administradorElectoralDTO);
+  public ResponseAdministradorElectoralDTO updateAdministradorElectoral(UpdateAdministradorElectoralDTO administradorElectoralDTO);
+  public ResponseAdministradorElectoralDTO updateAdministradorElectoral(Long id, UpdateAdministradorElectoralDTO administradorElectoralDTO);
+  public String login(LoginAdministradorElectoralDTO loginDTO);
+  public void deleteById(Long id);
+
+}

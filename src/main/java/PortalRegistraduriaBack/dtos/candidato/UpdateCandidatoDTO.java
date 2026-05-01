@@ -9,7 +9,9 @@ public class UpdateCandidatoDTO {
   private String nombre;
   private String numero;
   private String fotoUrl;
-  private String partidoLogoUrl;
+  private Boolean activo;
+  private Long idLista;
+  private Long idPartido;
   private Long idRegistrador;
 
 }

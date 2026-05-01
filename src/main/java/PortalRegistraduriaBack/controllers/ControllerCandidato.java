@@ -49,7 +49,7 @@ public class ControllerCandidato {
   @Operation(summary = "Crear un nuevo candidato")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Candidato creado exitosamente"),
-      @ApiResponse(responseCode = "404", description = "Registrador no encontrado")
+      @ApiResponse(responseCode = "404", description = "Registrador, lista o partido no encontrado")
   })
   @PostMapping("/add")
   public ResponseEntity<ResponseCandidatoDTO> crearCandidato(@RequestBody CreateCandidatoDTO candidatoDTO) {
@@ -59,7 +59,7 @@ public class ControllerCandidato {
   @Operation(summary = "Actualizar candidato por ID")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Candidato actualizado"),
-      @ApiResponse(responseCode = "404", description = "Candidato o registrador no encontrado")
+      @ApiResponse(responseCode = "404", description = "Candidato, registrador, lista o partido no encontrado")
   })
   @PutMapping("/{idCandidato}")
   public ResponseEntity<ResponseCandidatoDTO> actualizarCandidato(

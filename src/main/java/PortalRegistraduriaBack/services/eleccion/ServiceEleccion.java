@@ -10,14 +10,14 @@ import PortalRegistraduriaBack.dtos.eleccion.CreateEleccionDTO;
 import PortalRegistraduriaBack.dtos.eleccion.MapperEleccion;
 import PortalRegistraduriaBack.dtos.eleccion.ResponseEleccionDTO;
 import PortalRegistraduriaBack.dtos.eleccion.UpdateEleccionDTO;
+import PortalRegistraduriaBack.entities.AdministradorElectoral;
 import PortalRegistraduriaBack.entities.Eleccion;
-import PortalRegistraduriaBack.entities.Registrador;
 import PortalRegistraduriaBack.enums.EstadoEleccion;
 import PortalRegistraduriaBack.exceptions.BadRequestException;
 import PortalRegistraduriaBack.exceptions.BusinessException;
 import PortalRegistraduriaBack.exceptions.ResourceNotFoundException;
 import PortalRegistraduriaBack.repositories.RepositoryEleccion;
-import PortalRegistraduriaBack.repositories.RepositoryRegistrador;
+import PortalRegistraduriaBack.repositories.RepositoryAdministradorElectoral;
 
 @Service
 public class ServiceEleccion implements IServiceEleccion {
@@ -26,7 +26,7 @@ public class ServiceEleccion implements IServiceEleccion {
   RepositoryEleccion repositoryEleccion;
 
   @Autowired
-  RepositoryRegistrador repositoryRegistrador;
+  RepositoryAdministradorElectoral repositoryAdministradorElectoral;
 
   @Autowired
   MapperEleccion mapperEleccion;
@@ -44,13 +44,15 @@ public class ServiceEleccion implements IServiceEleccion {
 
  @Override
   public ResponseEleccionDTO addEleccion(CreateEleccionDTO eleccionDTO) {
-    Registrador registrador = repositoryRegistrador.findById(eleccionDTO.getIdRegistrador())
-      .orElseThrow(() -> new BadRequestException("El registrador con id" + eleccionDTO.getIdRegistrador() + "no existe."));
+    AdministradorElectoral administradorElectoral =
+      repositoryAdministradorElectoral.findById(eleccionDTO.getIdAdministradorElectoral())
+      .orElseThrow(() -> new BadRequestException(
+          "El administrador electoral con id " + eleccionDTO.getIdAdministradorElectoral() + " no existe."));
 
     Eleccion eleccion = mapperEleccion.toEntity(eleccionDTO);
     eleccion.setEstado(EstadoEleccion.CONFIGURACION);
     eleccion.setFechaCreacion(LocalDateTime.now());
-    eleccion.setRegistrador(registrador);
+    eleccion.setAdministradorElectoral(administradorElectoral);
 
     return mapperEleccion.toResponseDTO(repositoryEleccion.save(eleccion));
   }
@@ -69,15 +71,17 @@ public class ServiceEleccion implements IServiceEleccion {
     if (eleccion.getEstado() != EstadoEleccion.CONFIGURACION)
       throw new BusinessException("La elección solo se puede modificar en estado CONFIGURACION. Estado actual: " + eleccion.getEstado());
 
-    Registrador registrador = repositoryRegistrador.findById(eleccionDTO.getIdRegistrador())
-        .orElseThrow(() -> new BadRequestException("El registrador con id " + eleccionDTO.getIdRegistrador() + " no existe."));
+    AdministradorElectoral administradorElectoral =
+        repositoryAdministradorElectoral.findById(eleccionDTO.getIdAdministradorElectoral())
+        .orElseThrow(() -> new BadRequestException(
+            "El administrador electoral con id " + eleccionDTO.getIdAdministradorElectoral() + " no existe."));
 
     eleccion.setNombre(eleccionDTO.getNombre());
     eleccion.setFechaInicio(eleccionDTO.getFechaInicio());
     eleccion.setFechaFinalizacion(eleccionDTO.getFechaFinalizacion());
     eleccion.setTipo(eleccionDTO.getTipo());
     eleccion.setListaAbierta(eleccionDTO.getListaAbierta());
-    eleccion.setRegistrador(registrador);
+    eleccion.setAdministradorElectoral(administradorElectoral);
 
     return mapperEleccion.toResponseDTO(repositoryEleccion.save(eleccion));
   }

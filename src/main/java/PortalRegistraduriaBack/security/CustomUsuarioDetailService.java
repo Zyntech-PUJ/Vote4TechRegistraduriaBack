@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import PortalRegistraduriaBack.entities.Registrador;
 import PortalRegistraduriaBack.entities.Rol;
 import PortalRegistraduriaBack.entities.UsuarioEntity;
+import PortalRegistraduriaBack.entities.AdministradorElectoral;
+import PortalRegistraduriaBack.entities.ConsejoNacional;
 import PortalRegistraduriaBack.enums.TipoRol;
 import PortalRegistraduriaBack.repositories.RepositoryRol;
 import PortalRegistraduriaBack.repositories.RepositoryUsuarioEntity;
@@ -65,6 +67,32 @@ public class CustomUsuarioDetailService implements UserDetailsService {
       .build();
 
     Rol rol = repositoryRol.findByNombre(TipoRol.REGISTRADOR.name()).get();
+    usuario.setRoles(List.of(rol));
+
+    return usuario;
+  }
+
+  public UsuarioEntity administradorElectoralToUsuarioEntity(AdministradorElectoral administradorElectoral) {
+    UsuarioEntity usuario = UsuarioEntity
+      .builder()
+      .usuario(administradorElectoral.getUsuario())
+      .password(administradorElectoral.getPassword())
+      .build();
+
+    Rol rol = repositoryRol.findByNombre(TipoRol.ADMINISTRADOR_ELECTORAL.name()).get();
+    usuario.setRoles(List.of(rol));
+
+    return usuario;
+  }
+
+  public UsuarioEntity consejoNacionalToUsuarioEntity(ConsejoNacional consejoNacional) {
+    UsuarioEntity usuario = UsuarioEntity
+      .builder()
+      .usuario(consejoNacional.getUsername())
+      .password(consejoNacional.getPassword())
+      .build();
+
+    Rol rol = repositoryRol.findByNombre(TipoRol.CONSEJO_NACIONAL.name()).get();
     usuario.setRoles(List.of(rol));
 
     return usuario;
