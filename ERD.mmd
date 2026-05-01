@@ -1,0 +1,110 @@
+erDiagram
+    ADMINISTRADOR_ELECTORAL {
+        BIGINT id_administrador_electoral PK
+        VARCHAR usuario UK
+        VARCHAR password
+        BIGINT id_usuario_entity FK
+    }
+
+    CANDIDATO {
+        BIGINT id_candidato PK
+        VARCHAR nombre
+        VARCHAR numero
+        VARCHAR foto_url
+        BOOLEAN activo
+        BIGINT id_registrador FK
+        BIGINT id_lista FK
+        BIGINT id_partido FK
+    }
+
+    CIUDADANO {
+        BIGINT id_ciudadano PK
+        VARCHAR nombre
+        VARCHAR cedula UK
+        VARCHAR genero
+        BOOLEAN voto_obligatorio
+    }
+
+    CONSEJO_NACIONAL {
+        BIGINT id_consejo_nacional PK
+        VARCHAR usuario UK
+        VARCHAR password
+        BIGINT id_usuario_entity FK
+    }
+
+    ELECCION {
+        BIGINT id_eleccion PK
+        VARCHAR nombre
+        DATETIME fecha_inicio
+        DATETIME fecha_finalizacion
+        DATETIME fecha_creacion
+        VARCHAR tipo
+        BOOLEAN lista_abierta
+        VARCHAR estado
+        BIGINT id_administrador_electoral FK
+    }
+
+    ELECCION_JURADO {
+        BIGINT id_asignacion_jurado PK
+        BIGINT id_ciudadano FK
+        BIGINT id_eleccion FK
+        VARCHAR tipo_jurado
+        INT numero_mesa
+        DATETIME fecha_capacitacion
+        VARCHAR estado
+    }
+
+    LISTA {
+        BIGINT id_lista PK
+        VARCHAR tipo
+        DATETIME fecha_creacion
+        DATETIME fecha_modificacion
+        BIGINT id_eleccion FK
+    }
+
+    PARTIDO {
+        BIGINT id_partido PK
+        VARCHAR nombre
+        VARCHAR sigla
+        VARCHAR logo_url
+        DATETIME fecha_creacion
+    }
+
+    REGISTRADOR {
+        BIGINT id_registrador PK
+        VARCHAR nombre
+        VARCHAR usuario UK
+        VARCHAR password
+        BIGINT id_usuario_entity FK
+    }
+
+    ROL {
+        BIGINT idRol PK
+        VARCHAR nombre
+    }
+
+    USUARIOS_ENTITY {
+        BIGINT idUsuarioEntity PK
+        VARCHAR usuario
+        VARCHAR password
+    }
+
+    USUARIOS_ROLES {
+        BIGINT id_usuario_entity FK
+        BIGINT id_rol FK
+    }
+
+    USUARIOS_ENTITY ||--o| ADMINISTRADOR_ELECTORAL : autentica
+    USUARIOS_ENTITY ||--o| CONSEJO_NACIONAL : autentica
+    USUARIOS_ENTITY ||--o| REGISTRADOR : autentica
+
+    ADMINISTRADOR_ELECTORAL ||--o{ ELECCION : crea
+    ELECCION ||--o{ LISTA : contiene
+    LISTA ||--o{ CANDIDATO : agrupa
+    PARTIDO ||--o{ CANDIDATO : avala
+    REGISTRADOR ||--o{ CANDIDATO : registra
+    CIUDADANO ||--o{ ELECCION_JURADO : participa
+    ELECCION ||--o{ ELECCION_JURADO : asigna
+
+    USUARIOS_ENTITY ||--o{ USUARIOS_ROLES : tiene
+    ROL ||--o{ USUARIOS_ROLES : asigna

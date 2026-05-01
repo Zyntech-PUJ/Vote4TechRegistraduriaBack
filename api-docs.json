@@ -20,12 +20,20 @@
       "description": "Gestión de candidatos"
     },
     {
+      "name": "Consejo Nacional Electoral",
+      "description": "Gestión del consejo nacional electoral"
+    },
+    {
       "name": "Eleccion",
       "description": "Gestión de elecciones y su ciclo de vida"
     },
     {
       "name": "Eleccion Jurado",
       "description": "Gestión del sorteo y listado de jurados por elección"
+    },
+    {
+      "name": "Administrador Electoral",
+      "description": "Gestión de administradores electorales"
     }
   ],
   "paths": {
@@ -276,6 +284,124 @@
         }
       }
     },
+    "/consejo-nacional/{idConsejoNacional}": {
+      "get": {
+        "tags": [
+          "Consejo Nacional Electoral"
+        ],
+        "summary": "Obtener consejo nacional por ID",
+        "operationId": "obtenerConsejoNacionalById",
+        "parameters": [
+          {
+            "name": "idConsejoNacional",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consejo nacional encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseConsejoNacionalDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consejo nacional no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseConsejoNacionalDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Consejo Nacional Electoral"
+        ],
+        "summary": "Actualizar consejo nacional por ID",
+        "operationId": "actualizarConsejoNacional",
+        "parameters": [
+          {
+            "name": "idConsejoNacional",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConsejoNacionalDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Consejo nacional actualizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseConsejoNacionalDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consejo nacional no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseConsejoNacionalDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Consejo Nacional Electoral"
+        ],
+        "summary": "Eliminar consejo nacional por ID",
+        "operationId": "eliminarConsejoNacional",
+        "parameters": [
+          {
+            "name": "idConsejoNacional",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Consejo nacional eliminado"
+          },
+          "404": {
+            "description": "Consejo nacional no encontrado"
+          }
+        }
+      }
+    },
     "/candidato/{idCandidato}": {
       "get": {
         "tags": [
@@ -356,7 +482,7 @@
             }
           },
           "404": {
-            "description": "Candidato o registrador no encontrado",
+            "description": "Candidato, registrador, lista o partido no encontrado",
             "content": {
               "*/*": {
                 "schema": {
@@ -390,6 +516,124 @@
           },
           "404": {
             "description": "Candidato no encontrado"
+          }
+        }
+      }
+    },
+    "/administrador-electoral/{idAdministradorElectoral}": {
+      "get": {
+        "tags": [
+          "Administrador Electoral"
+        ],
+        "summary": "Obtener administrador electoral por ID",
+        "operationId": "obtenerAdministradorElectoralById",
+        "parameters": [
+          {
+            "name": "idAdministradorElectoral",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Administrador electoral encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Administrador electoral no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administrador Electoral"
+        ],
+        "summary": "Actualizar administrador electoral por ID",
+        "operationId": "actualizarAdministradorElectoral",
+        "parameters": [
+          {
+            "name": "idAdministradorElectoral",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAdministradorElectoralDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Administrador electoral actualizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Administrador electoral no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Administrador Electoral"
+        ],
+        "summary": "Eliminar administrador electoral por ID",
+        "operationId": "eliminarAdministradorElectoral",
+        "parameters": [
+          {
+            "name": "idAdministradorElectoral",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Administrador electoral eliminado"
+          },
+          "404": {
+            "description": "Administrador electoral no encontrado"
           }
         }
       }
@@ -676,6 +920,78 @@
         }
       }
     },
+    "/consejo-nacional/login": {
+      "post": {
+        "tags": [
+          "Consejo Nacional Electoral"
+        ],
+        "summary": "Login de consejo nacional",
+        "operationId": "login_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginConsejoNacionalDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login exitoso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/consejo-nacional/add": {
+      "post": {
+        "tags": [
+          "Consejo Nacional Electoral"
+        ],
+        "summary": "Crear un nuevo consejo nacional",
+        "operationId": "crearConsejoNacional",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateConsejoNacionalDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Consejo nacional creado exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseConsejoNacionalDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/candidato/add": {
       "post": {
         "tags": [
@@ -705,11 +1021,83 @@
             }
           },
           "404": {
-            "description": "Registrador no encontrado",
+            "description": "Registrador, lista o partido no encontrado",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ResponseCandidatoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/administrador-electoral/login": {
+      "post": {
+        "tags": [
+          "Administrador Electoral"
+        ],
+        "summary": "Login de administrador electoral",
+        "operationId": "login_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginAdministradorElectoralDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login exitoso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/administrador-electoral/add": {
+      "post": {
+        "tags": [
+          "Administrador Electoral"
+        ],
+        "summary": "Crear un nuevo administrador electoral",
+        "operationId": "crearAdministradorElectoral",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdministradorElectoralDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Administrador electoral creado exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
                 }
               }
             }
@@ -937,6 +1325,30 @@
         }
       }
     },
+    "/consejo-nacional/consejos": {
+      "get": {
+        "tags": [
+          "Consejo Nacional Electoral"
+        ],
+        "summary": "Obtener todos los consejos nacionales",
+        "operationId": "obtenerConsejosNacionales",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseConsejoNacionalDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/candidato/candidatos": {
       "get": {
         "tags": [
@@ -953,6 +1365,30 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/ResponseCandidatoDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/administrador-electoral/administradores": {
+      "get": {
+        "tags": [
+          "Administrador Electoral"
+        ],
+        "summary": "Obtener todos los administradores electorales",
+        "operationId": "obtenerAdministradoresElectorales",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
                   }
                 }
               }
@@ -1016,14 +1452,31 @@
             "format": "date-time"
           },
           "tipo": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "PRESIDENCIAL",
+              "LEGISLATIVA",
+              "CONSULTA"
+            ]
           },
           "listaAbierta": {
             "type": "boolean"
           },
-          "idRegistrador": {
+          "idAdministradorElectoral": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ResponseAdministradorElectoralDTO": {
+        "type": "object",
+        "properties": {
+          "idAdministradorElectoral": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "usuario": {
+            "type": "string"
           }
         }
       },
@@ -1050,7 +1503,12 @@
             "format": "date-time"
           },
           "tipo": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "PRESIDENCIAL",
+              "LEGISLATIVA",
+              "CONSULTA"
+            ]
           },
           "listaAbierta": {
             "type": "boolean"
@@ -1064,8 +1522,35 @@
               "FINALIZADA"
             ]
           },
-          "registrador": {
-            "$ref": "#/components/schemas/ResponseRegistradorDTO"
+          "administradorElectoral": {
+            "$ref": "#/components/schemas/ResponseAdministradorElectoralDTO"
+          }
+        }
+      },
+      "UpdateConsejoNacionalDTO": {
+        "type": "object",
+        "properties": {
+          "idConsejoNacional": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ResponseConsejoNacionalDTO": {
+        "type": "object",
+        "properties": {
+          "idConsejoNacional": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
           }
         }
       },
@@ -1085,8 +1570,16 @@
           "fotoUrl": {
             "type": "string"
           },
-          "partidoLogoUrl": {
-            "type": "string"
+          "activo": {
+            "type": "boolean"
+          },
+          "idLista": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
           },
           "idRegistrador": {
             "type": "integer",
@@ -1110,11 +1603,35 @@
           "fotoUrl": {
             "type": "string"
           },
-          "partidoLogoUrl": {
+          "activo": {
+            "type": "boolean"
+          },
+          "idLista": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "UpdateAdministradorElectoralDTO": {
+        "type": "object",
+        "properties": {
+          "idAdministradorElectoral": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "usuario": {
             "type": "string"
           },
-          "registrador": {
-            "$ref": "#/components/schemas/ResponseRegistradorDTO"
+          "password": {
+            "type": "string"
           }
         }
       },
@@ -1158,12 +1675,17 @@
             "format": "date-time"
           },
           "tipo": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "PRESIDENCIAL",
+              "LEGISLATIVA",
+              "CONSULTA"
+            ]
           },
           "listaAbierta": {
             "type": "boolean"
           },
-          "idRegistrador": {
+          "idAdministradorElectoral": {
             "type": "integer",
             "format": "int64"
           }
@@ -1220,6 +1742,28 @@
           }
         }
       },
+      "LoginConsejoNacionalDTO": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateConsejoNacionalDTO": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
       "CreateCandidatoDTO": {
         "type": "object",
         "properties": {
@@ -1232,12 +1776,42 @@
           "fotoUrl": {
             "type": "string"
           },
-          "partidoLogoUrl": {
-            "type": "string"
+          "activo": {
+            "type": "boolean"
+          },
+          "idLista": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
           },
           "idRegistrador": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "LoginAdministradorElectoralDTO": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAdministradorElectoralDTO": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
           }
         }
       },
