@@ -81,6 +81,17 @@ public class ControllerEleccion {
     return ResponseEntity.ok(serviceEleccion.lanzarEleccion(idEleccion));
   }
 
+  @Operation(summary = "Iniciar elección", description = "Cambia el estado de LANZADA a EN_CURSO")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Elección iniciada exitosamente"),
+      @ApiResponse(responseCode = "404", description = "Elección no encontrada"),
+      @ApiResponse(responseCode = "409", description = "La elección no está en estado LANZADA")
+  })
+  @PatchMapping("/{idEleccion}/iniciar")
+  public ResponseEntity<ResponseEleccionDTO> iniciarEleccion(@PathVariable Long idEleccion) {
+    return ResponseEntity.ok(serviceEleccion.iniciarEleccion(idEleccion));
+  }
+
   @Operation(summary = "Finalizar elección", description = "Cambia el estado de EN_CURSO a FINALIZADA")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Elección finalizada exitosamente"),

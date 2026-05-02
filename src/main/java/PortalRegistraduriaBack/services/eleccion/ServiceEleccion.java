@@ -108,6 +108,18 @@ public class ServiceEleccion implements IServiceEleccion {
   }
 
   @Override
+  public ResponseEleccionDTO iniciarEleccion(Long id) {
+    Eleccion eleccion = repositoryEleccion.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("No se encontró la elección con id: " + id));
+
+    if (eleccion.getEstado() != EstadoEleccion.LANZADA)
+      throw new BusinessException("Solo se puede iniciar una elección en estado LANZADA. Estado actual: " + eleccion.getEstado());
+
+    eleccion.setEstado(EstadoEleccion.EN_CURSO);
+    return mapperEleccion.toResponseDTO(repositoryEleccion.save(eleccion));
+  }
+
+  @Override
   public ResponseEleccionDTO finalizarEleccion(Long id) {
     Eleccion eleccion = repositoryEleccion.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("No se encontró la elección con id: " + id));

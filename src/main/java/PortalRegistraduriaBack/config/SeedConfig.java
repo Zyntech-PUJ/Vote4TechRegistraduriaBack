@@ -10,12 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import PortalRegistraduriaBack.entities.Candidato;
+import PortalRegistraduriaBack.entities.CentroVotacion;
 import PortalRegistraduriaBack.entities.Ciudadano;
 import PortalRegistraduriaBack.entities.AdministradorElectoral;
 import PortalRegistraduriaBack.entities.ConsejoNacional;
 import PortalRegistraduriaBack.entities.Eleccion;
 import PortalRegistraduriaBack.entities.EleccionJurado;
 import PortalRegistraduriaBack.entities.Lista;
+import PortalRegistraduriaBack.entities.Mesa;
 import PortalRegistraduriaBack.entities.Partido;
 import PortalRegistraduriaBack.entities.Registrador;
 import PortalRegistraduriaBack.entities.Rol;
@@ -25,14 +27,17 @@ import PortalRegistraduriaBack.enums.EstadoEleccionJurado;
 import PortalRegistraduriaBack.enums.TipoEleccion;
 import PortalRegistraduriaBack.enums.TipoJurado;
 import PortalRegistraduriaBack.enums.TipoLista;
+import PortalRegistraduriaBack.enums.TipoMesa;
 import PortalRegistraduriaBack.enums.TipoRol;
 import PortalRegistraduriaBack.repositories.RepositoryCandidato;
+import PortalRegistraduriaBack.repositories.RepositoryCentroVotacion;
 import PortalRegistraduriaBack.repositories.RepositoryCiudadano;
 import PortalRegistraduriaBack.repositories.RepositoryAdministradorElectoral;
 import PortalRegistraduriaBack.repositories.RepositoryConsejoNacional;
 import PortalRegistraduriaBack.repositories.RepositoryEleccion;
 import PortalRegistraduriaBack.repositories.RepositoryEleccionJurado;
 import PortalRegistraduriaBack.repositories.RepositoryLista;
+import PortalRegistraduriaBack.repositories.RepositoryMesa;
 import PortalRegistraduriaBack.repositories.RepositoryPartido;
 import PortalRegistraduriaBack.repositories.RepositoryRegistrador;
 import PortalRegistraduriaBack.repositories.RepositoryRol;
@@ -73,6 +78,12 @@ public class SeedConfig {
 
   @Autowired
   private RepositoryUsuarioEntity repositoryUsuarioEntity;
+
+  @Autowired
+  private RepositoryCentroVotacion repositoryCentroVotacion;
+
+  @Autowired
+  private RepositoryMesa repositoryMesa;
 
   @Bean
   public CommandLineRunner seed() {
@@ -627,6 +638,27 @@ public class SeedConfig {
               .estado(EstadoEleccionJurado.PENDIENTE).build()));
 
       System.out.println("✅ EleccionJurado cargados.");
+
+      // ── 6. CENTRO DE VOTACION Y MESAS ────────────────────────────────
+      CentroVotacion cv1 = CentroVotacion.builder()
+          .nombre("Colegio San José")
+          .direccion("Calle 10 # 5-23")
+          .ciudad("Bogotá")
+          .departamento("Cundinamarca")
+          .activo(true)
+          .build();
+      repositoryCentroVotacion.save(cv1);
+
+      repositoryMesa.saveAll(List.of(
+          Mesa.builder().numero(1).tipo(TipoMesa.URNA).activo(true).centroVotacion(cv1).build(),
+          Mesa.builder().numero(2).tipo(TipoMesa.URNA).activo(true).centroVotacion(cv1).build(),
+          Mesa.builder().numero(3).tipo(TipoMesa.URNA).activo(true).centroVotacion(cv1).build(),
+          Mesa.builder().numero(4).tipo(TipoMesa.URNA).activo(true).centroVotacion(cv1).build(),
+          Mesa.builder().numero(5).tipo(TipoMesa.URNA).activo(true).centroVotacion(cv1).build(),
+          Mesa.builder().numero(1).tipo(TipoMesa.DOMICILIO).activo(true).centroVotacion(cv1).build()
+      ));
+
+      System.out.println("✅ CentroVotacion y Mesas cargados.");
       System.out.println("🌱 Seed completado correctamente.");
     };
   }

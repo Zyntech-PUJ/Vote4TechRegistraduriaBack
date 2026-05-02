@@ -14,6 +14,7 @@ public interface IServiceEleccion {
   public ResponseEleccionDTO updateEleccion(UpdateEleccionDTO eleccionDTO);
   public ResponseEleccionDTO updateEleccion(Long id, UpdateEleccionDTO eleccionDTO);
   public ResponseEleccionDTO lanzarEleccion(Long id);
+  public ResponseEleccionDTO iniciarEleccion(Long id);
   public ResponseEleccionDTO finalizarEleccion(Long id);
   public void deleteById(Long id);
 

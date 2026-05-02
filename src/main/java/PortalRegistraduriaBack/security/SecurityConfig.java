@@ -53,6 +53,16 @@ public class SecurityConfig {
           .requestMatchers("/administrador-electoral/**").hasAuthority(TipoRol.ADMINISTRADOR_ELECTORAL.name())
 
 // ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
+// ------------------------- SECTION .hasAuthority(REGISTRADOR) - CENTRO VOTACION Y MESA -------------------------
+
+          .requestMatchers(HttpMethod.POST, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers(HttpMethod.PUT, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers(HttpMethod.DELETE, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers(HttpMethod.POST, "/mesa/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers(HttpMethod.PUT, "/mesa/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers(HttpMethod.DELETE, "/mesa/**").hasAuthority(TipoRol.REGISTRADOR.name())
+
+// ------------------------- END SECTION .hasAuthority(REGISTRADOR) - CENTRO VOTACION Y MESA -------------------------
           .anyRequest().permitAll()
       )
       .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
