@@ -47,12 +47,12 @@ public class SecurityConfig {
           .requestMatchers("/registrador/**").hasAuthority(TipoRol.REGISTRADOR.name())
 
 // ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
-// ------------------------- SECTION .hasAuthority(REGISTRADOR) -------------------------
+// ------------------------- SECTION .hasAuthority(ADMINISTRADOR_ELECTORAL) -------------------------
 
           .requestMatchers("/eleccion/**").hasAuthority(TipoRol.ADMINISTRADOR_ELECTORAL.name())
           .requestMatchers("/administrador-electoral/**").hasAuthority(TipoRol.ADMINISTRADOR_ELECTORAL.name())
 
-// ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
+// ------------------------- END SECTION .hasAuthority(ADMINISTRADOR_ELECTORAL) -------------------------
 // ------------------------- SECTION .hasAuthority(REGISTRADOR) - CENTRO VOTACION Y MESA -------------------------
 
           .requestMatchers(HttpMethod.POST, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
@@ -63,6 +63,13 @@ public class SecurityConfig {
           .requestMatchers(HttpMethod.DELETE, "/mesa/**").hasAuthority(TipoRol.REGISTRADOR.name())
 
 // ------------------------- END SECTION .hasAuthority(REGISTRADOR) - CENTRO VOTACION Y MESA -------------------------
+// ------------------------- SECTION .hasAuthority(CONSEJO_NACIONAL) -------------------------
+
+          .requestMatchers("/candidato/**").hasAuthority(TipoRol.CONSEJO_NACIONAL.name())
+          .requestMatchers("/partido/**").hasAuthority(TipoRol.CONSEJO_NACIONAL.name())
+          .requestMatchers("/consejo-nacional/**").hasAuthority(TipoRol.CONSEJO_NACIONAL.name())
+
+// ------------------------- END SECTION .hasAuthority(CONSEJO_NACIONAL) -------------------------
           .anyRequest().permitAll()
       )
       .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
