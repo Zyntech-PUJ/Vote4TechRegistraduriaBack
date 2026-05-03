@@ -42,6 +42,9 @@ public class Registrador {
     @OneToMany(mappedBy = "registrador", cascade = CascadeType.ALL)
     private List<Candidato> candidatos;
 
+    @OneToMany(mappedBy = "registrador", cascade = CascadeType.ALL)
+    private List<Partido> partidos;
+
     @OneToOne
     @JoinColumn(name = "id_usuario_entity")
     private UsuarioEntity usuarioEntity;

@@ -511,7 +511,7 @@ public class SeedConfig {
         .nombre("Centro Democratico")
         .sigla("CD")
         .fechaCreacion(LocalDateTime.now())
-        .logoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
+        .registrador(r1)
         .build();
 
       repositoryPartido.save(p1);
@@ -537,36 +537,36 @@ public class SeedConfig {
 
       // ── 4. CANDIDATOS ────────────────────────────────────────────────
       Candidato cn1 = Candidato.builder()
-              .nombre("Gustavo Petro Urrego").numero("1")
-              .activo(true)
-              .registrador(r1)
-              .lista(l1)
-              .partido(p1)
-              .build();
+        .nombre("Gustavo Petro Urrego").numero("1")
+        .activo(true)
+        .registrador(r1)
+        .lista(l1)
+        .partido(p1)
+        .build();
 
       Candidato cn2 = Candidato.builder()
-              .nombre("Francia Márquez Mina").numero("2")
-              .activo(true)
-              .registrador(r1)
-              .lista(l1)
-              .partido(p1)
-              .build();
+        .nombre("Francia Márquez Mina").numero("2")
+        .activo(true)
+        .registrador(r1)
+        .lista(l1)
+        .partido(p1)
+        .build();
 
       Candidato cn3 = Candidato.builder()
-              .nombre("Sergio Fajardo Valderrama").numero("3")
-              .activo(true)
-              .registrador(r1)
-              .lista(l2)
-              .partido(p1)
-              .build();
+        .nombre("Sergio Fajardo Valderrama").numero("3")
+        .activo(true)
+        .registrador(r1)
+        .lista(l2)
+        .partido(p1)
+        .build();
 
       Candidato cn4 = Candidato.builder()
-              .nombre("Ingrid Betancourt Pulecio").numero("4")
-              .activo(true)
-              .registrador(r1)
-              .lista(l2)
-              .partido(p1)
-              .build();
+        .nombre("Ingrid Betancourt Pulecio").numero("4")
+        .activo(true)
+        .registrador(r1)
+        .lista(l2)
+        .partido(p1)
+        .build();
 
       repositoryCandidato.saveAll(List.of(cn1, cn2, cn3, cn4));
 

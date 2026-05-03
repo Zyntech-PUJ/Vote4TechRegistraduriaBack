@@ -86,7 +86,7 @@ public class ServiceCandidato implements IServiceCandidato {
       candidato.setCopiaCedula(cedula.getBytes());
       candidato.setDocumentoAval(aval.getBytes());
     } catch(IOException e) {
-      throw new BadRequestException("Error procesando las imagenes");
+      throw new BadRequestException("Error procesando las imagenes/archivos");
     }
 
     return mapperCandidato.toResponseDTO(repositoryCandidato.save(candidato));
