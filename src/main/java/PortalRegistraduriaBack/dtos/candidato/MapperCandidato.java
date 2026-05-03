@@ -15,7 +15,6 @@ public class MapperCandidato {
     Candidato candidato = new Candidato();
     candidato.setNombre(dto.getNombre());
     candidato.setNumero(dto.getNumero());
-    candidato.setFotoUrl(dto.getFotoUrl());
     candidato.setActivo(dto.getActivo());
 
     return candidato;
@@ -28,7 +27,6 @@ public class MapperCandidato {
     candidato.setIdCandidato(dto.getIdCandidato());
     candidato.setNombre(dto.getNombre());
     candidato.setNumero(dto.getNumero());
-    candidato.setFotoUrl(dto.getFotoUrl());
     candidato.setActivo(dto.getActivo());
 
     return candidato;
@@ -41,7 +39,6 @@ public class MapperCandidato {
     dto.setIdCandidato(candidato.getIdCandidato());
     dto.setNombre(candidato.getNombre());
     dto.setNumero(candidato.getNumero());
-    dto.setFotoUrl(candidato.getFotoUrl());
     dto.setActivo(candidato.getActivo());
     dto.setIdLista(candidato.getLista() != null ? candidato.getLista().getIdLista() : null);
     dto.setIdPartido(candidato.getPartido() != null ? candidato.getPartido().getIdPartido() : null);

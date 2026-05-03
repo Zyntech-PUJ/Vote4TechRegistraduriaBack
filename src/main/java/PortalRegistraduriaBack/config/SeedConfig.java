@@ -511,7 +511,7 @@ public class SeedConfig {
         .nombre("Centro Democratico")
         .sigla("CD")
         .fechaCreacion(LocalDateTime.now())
-        .logoUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDXxCFLEaDnaFBjyRlLN6x7uElthDvh_RXaw&s")
+        .registrador(r1)
         .build();
 
       repositoryPartido.save(p1);
@@ -537,40 +537,36 @@ public class SeedConfig {
 
       // ── 4. CANDIDATOS ────────────────────────────────────────────────
       Candidato cn1 = Candidato.builder()
-              .nombre("Gustavo Petro Urrego").numero("1")
-              .fotoUrl("https://aiselfi.es/blog-images/ejemplos-fotos-profesionales.webp")
-              .activo(true)
-              .registrador(r1)
-              .lista(l1)
-              .partido(p1)
-              .build();
+        .nombre("Gustavo Petro Urrego").numero("1")
+        .activo(true)
+        .registrador(r1)
+        .lista(l1)
+        .partido(p1)
+        .build();
 
       Candidato cn2 = Candidato.builder()
-              .nombre("Francia Márquez Mina").numero("2")
-              .fotoUrl("https://img.freepik.com/fotos-premium/empresaria-bastante-caucasica-expresion-cara-complacida-sonrisa-encantadora-vestida-elegante-traje-formal-negro-mirando-sinceramente-camara-sobre-fondo-azul-claro-concepto-mujer-exitosa_95891-5567.jpg")
-              .activo(true)
-              .registrador(r1)
-              .lista(l1)
-              .partido(p1)
-              .build();
+        .nombre("Francia Márquez Mina").numero("2")
+        .activo(true)
+        .registrador(r1)
+        .lista(l1)
+        .partido(p1)
+        .build();
 
       Candidato cn3 = Candidato.builder()
-              .nombre("Sergio Fajardo Valderrama").numero("3")
-              .fotoUrl("https://media.revistagq.com/photos/5ca5e76cc57c5b8a01c54363/1:1/w_800,h_800,c_limit/los_50_hombres_mas_elegantes_de_2015_440850226.jpg")
-              .activo(true)
-              .registrador(r1)
-              .lista(l2)
-              .partido(p1)
-              .build();
+        .nombre("Sergio Fajardo Valderrama").numero("3")
+        .activo(true)
+        .registrador(r1)
+        .lista(l2)
+        .partido(p1)
+        .build();
 
       Candidato cn4 = Candidato.builder()
-              .nombre("Ingrid Betancourt Pulecio").numero("4")
-              .fotoUrl("https://png.pngtree.com/background/20230912/original/pngtree-young-woman-face-serious-people-woman-photo-picture-image_5054394.jpg")
-              .activo(true)
-              .registrador(r1)
-              .lista(l2)
-              .partido(p1)
-              .build();
+        .nombre("Ingrid Betancourt Pulecio").numero("4")
+        .activo(true)
+        .registrador(r1)
+        .lista(l2)
+        .partido(p1)
+        .build();
 
       repositoryCandidato.saveAll(List.of(cn1, cn2, cn3, cn4));
 

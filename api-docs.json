@@ -12,6 +12,10 @@
   ],
   "tags": [
     {
+      "name": "CentroVotacion",
+      "description": "Gestión de centros de votación"
+    },
+    {
       "name": "Registrador",
       "description": "Gestión de registradores"
     },
@@ -30,6 +34,14 @@
     {
       "name": "Eleccion Jurado",
       "description": "Gestión del sorteo y listado de jurados por elección"
+    },
+    {
+      "name": "Partido",
+      "description": "Gestion de partidos y su ciclo de vida"
+    },
+    {
+      "name": "Mesa",
+      "description": "Gestión de mesas de votación"
     },
     {
       "name": "Administrador Electoral",
@@ -151,6 +163,134 @@
           },
           "404": {
             "description": "Registrador no encontrado"
+          }
+        }
+      }
+    },
+    "/mesa/{idMesa}": {
+      "get": {
+        "tags": [
+          "Mesa"
+        ],
+        "summary": "Obtener mesa por ID",
+        "operationId": "obtenerMesaPorId",
+        "parameters": [
+          {
+            "name": "idMesa",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mesa encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mesa no encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Mesa"
+        ],
+        "summary": "Actualizar mesa por ID",
+        "operationId": "actualizarMesa",
+        "parameters": [
+          {
+            "name": "idMesa",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMesaDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Mesa actualizada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mesa o centro de votación no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Tipo de mesa inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Mesa"
+        ],
+        "summary": "Eliminar mesa por ID",
+        "operationId": "eliminarMesa",
+        "parameters": [
+          {
+            "name": "idMesa",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Mesa eliminada"
+          },
+          "404": {
+            "description": "Mesa no encontrada"
           }
         }
       }
@@ -398,6 +538,124 @@
           },
           "404": {
             "description": "Consejo nacional no encontrado"
+          }
+        }
+      }
+    },
+    "/centro-votacion/{idCentroVotacion}": {
+      "get": {
+        "tags": [
+          "CentroVotacion"
+        ],
+        "summary": "Obtener centro de votación por ID",
+        "operationId": "obtenerCentroPorId",
+        "parameters": [
+          {
+            "name": "idCentroVotacion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Centro de votación encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Centro de votación no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "CentroVotacion"
+        ],
+        "summary": "Actualizar centro de votación por ID",
+        "operationId": "actualizarCentro",
+        "parameters": [
+          {
+            "name": "idCentroVotacion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCentroVotacionDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Centro de votación actualizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Centro de votación no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CentroVotacion"
+        ],
+        "summary": "Eliminar centro de votación por ID",
+        "operationId": "eliminarCentro",
+        "parameters": [
+          {
+            "name": "idCentroVotacion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Centro de votación eliminado"
+          },
+          "404": {
+            "description": "Centro de votación no encontrado"
           }
         }
       }
@@ -710,6 +968,130 @@
         }
       }
     },
+    "/partido/add": {
+      "post": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Crear un nuevo partido",
+        "operationId": "crearPartido",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/CreatePartidoDTO"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "estatutos": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "plataforma": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "registro": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "certificado": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "certificado",
+                  "data",
+                  "estatutos",
+                  "logo",
+                  "plataforma",
+                  "registro"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Partido creado exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registrador no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mesa/add": {
+      "post": {
+        "tags": [
+          "Mesa"
+        ],
+        "summary": "Crear una nueva mesa",
+        "operationId": "crearMesa",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMesaDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Mesa creada exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Centro de votación no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Tipo de mesa inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMesaDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/eleccion/add": {
       "post": {
         "tags": [
@@ -992,6 +1374,37 @@
         }
       }
     },
+    "/centro-votacion/add": {
+      "post": {
+        "tags": [
+          "CentroVotacion"
+        ],
+        "summary": "Crear un nuevo centro de votación",
+        "operationId": "crearCentro",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCentroVotacionDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Centro de votación creado exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/candidato/add": {
       "post": {
         "tags": [
@@ -1001,13 +1414,45 @@
         "operationId": "crearCandidato",
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCandidatoDTO"
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/CreateCandidatoDTO"
+                  },
+                  "foto": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "formularioE6": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "certificado": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "cedula": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "aval": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "aval",
+                  "cedula",
+                  "certificado",
+                  "data",
+                  "formularioE6",
+                  "foto"
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -1158,6 +1603,59 @@
         }
       }
     },
+    "/eleccion/{idEleccion}/iniciar": {
+      "patch": {
+        "tags": [
+          "Eleccion"
+        ],
+        "summary": "Iniciar elección",
+        "description": "Cambia el estado de LANZADA a EN_CURSO",
+        "operationId": "iniciarEleccion",
+        "parameters": [
+          {
+            "name": "idEleccion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Elección iniciada exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEleccionDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Elección no encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEleccionDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "La elección no está en estado LANZADA",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEleccionDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/eleccion/{idEleccion}/finalizar": {
       "patch": {
         "tags": [
@@ -1227,6 +1725,170 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/ResponseRegistradorDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener partido por ID",
+        "operationId": "obtenerPartidoById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Partido encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Eliminar partido por ID",
+        "operationId": "eliminarPartido",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Partido eliminado"
+          },
+          "404": {
+            "description": "Partido no encontrado"
+          }
+        }
+      }
+    },
+    "/partido/partidos": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener todos los partidos",
+        "operationId": "obtenerPartidos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponsePartidoDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mesa/mesas": {
+      "get": {
+        "tags": [
+          "Mesa"
+        ],
+        "summary": "Obtener todas las mesas",
+        "operationId": "obtenerMesas",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseMesaDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mesa/centro/{idCentroVotacion}": {
+      "get": {
+        "tags": [
+          "Mesa"
+        ],
+        "summary": "Obtener mesas por centro de votación",
+        "operationId": "obtenerMesasPorCentro",
+        "parameters": [
+          {
+            "name": "idCentroVotacion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mesas del centro encontradas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseMesaDTO"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Centro de votación no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseMesaDTO"
                   }
                 }
               }
@@ -1349,6 +2011,30 @@
         }
       }
     },
+    "/centro-votacion/centros": {
+      "get": {
+        "tags": [
+          "CentroVotacion"
+        ],
+        "summary": "Obtener todos los centros de votación",
+        "operationId": "obtenerCentros",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/candidato/candidatos": {
       "get": {
         "tags": [
@@ -1429,6 +2115,57 @@
             "type": "string"
           },
           "usuario": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateMesaDTO": {
+        "type": "object",
+        "properties": {
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idCentroVotacion": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ResponseMesaDTO": {
+        "type": "object",
+        "properties": {
+          "idMesa": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idCentroVotacion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombreCentroVotacion": {
+            "type": "string"
+          },
+          "ciudadCentroVotacion": {
+            "type": "string"
+          },
+          "departamentoCentroVotacion": {
             "type": "string"
           }
         }
@@ -1554,6 +2291,50 @@
           }
         }
       },
+      "UpdateCentroVotacionDTO": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "ciudad": {
+            "type": "string"
+          },
+          "departamento": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ResponseCentroVotacionDTO": {
+        "type": "object",
+        "properties": {
+          "idCentroVotacion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "ciudad": {
+            "type": "string"
+          },
+          "departamento": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        }
+      },
       "UpdateCandidatoDTO": {
         "type": "object",
         "properties": {
@@ -1657,6 +2438,59 @@
           },
           "password": {
             "type": "string"
+          }
+        }
+      },
+      "CreatePartidoDTO": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ResponsePartidoDTO": {
+        "type": "object",
+        "properties": {
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CreateMesaDTO": {
+        "type": "object",
+        "properties": {
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idCentroVotacion": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -1764,6 +2598,26 @@
           }
         }
       },
+      "CreateCentroVotacionDTO": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "ciudad": {
+            "type": "string"
+          },
+          "departamento": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        }
+      },
       "CreateCandidatoDTO": {
         "type": "object",
         "properties": {
@@ -1771,9 +2625,6 @@
             "type": "string"
           },
           "numero": {
-            "type": "string"
-          },
-          "fotoUrl": {
             "type": "string"
           },
           "activo": {

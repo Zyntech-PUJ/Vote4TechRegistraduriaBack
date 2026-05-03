@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import PortalRegistraduriaBack.dtos.candidato.CreateCandidatoDTO;
 import PortalRegistraduriaBack.dtos.candidato.ResponseCandidatoDTO;
@@ -51,9 +53,20 @@ public class ControllerCandidato {
       @ApiResponse(responseCode = "200", description = "Candidato creado exitosamente"),
       @ApiResponse(responseCode = "404", description = "Registrador, lista o partido no encontrado")
   })
-  @PostMapping("/add")
-  public ResponseEntity<ResponseCandidatoDTO> crearCandidato(@RequestBody CreateCandidatoDTO candidatoDTO) {
-    return ResponseEntity.ok(serviceCandidato.addCandidato(candidatoDTO));
+  @PostMapping(value = "/add", consumes = "multipart/form-data")
+  public ResponseEntity<ResponseCandidatoDTO> crearCandidato(
+      @RequestPart("data") CreateCandidatoDTO candidatoDTO,
+      @RequestPart("foto") MultipartFile foto,
+      @RequestPart("formularioE6") MultipartFile formularioE6,
+      @RequestPart("certificado") MultipartFile certificado,
+      @RequestPart("cedula") MultipartFile cedula,
+      @RequestPart("aval") MultipartFile aval
+  ) {
+      return ResponseEntity.ok(
+        serviceCandidato.addCandidato(
+          candidatoDTO, foto, formularioE6, certificado, cedula, aval
+        )
+      );
   }
 
   @Operation(summary = "Actualizar candidato por ID")

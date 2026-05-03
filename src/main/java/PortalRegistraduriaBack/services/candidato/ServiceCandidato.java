@@ -1,9 +1,11 @@
 package PortalRegistraduriaBack.services.candidato;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import PortalRegistraduriaBack.dtos.candidato.CreateCandidatoDTO;
 import PortalRegistraduriaBack.dtos.candidato.MapperCandidato;
@@ -13,6 +15,7 @@ import PortalRegistraduriaBack.entities.Candidato;
 import PortalRegistraduriaBack.entities.Lista;
 import PortalRegistraduriaBack.entities.Partido;
 import PortalRegistraduriaBack.entities.Registrador;
+import PortalRegistraduriaBack.exceptions.BadRequestException;
 import PortalRegistraduriaBack.exceptions.ResourceNotFoundException;
 import PortalRegistraduriaBack.repositories.RepositoryCandidato;
 import PortalRegistraduriaBack.repositories.RepositoryLista;
@@ -51,7 +54,14 @@ public class ServiceCandidato implements IServiceCandidato {
   }
 
   @Override
-  public ResponseCandidatoDTO addCandidato(CreateCandidatoDTO candidatoDTO) {
+  public ResponseCandidatoDTO addCandidato(
+    CreateCandidatoDTO candidatoDTO,
+    MultipartFile foto,
+    MultipartFile formularioE6,
+    MultipartFile certificado,
+    MultipartFile cedula,
+    MultipartFile aval
+  ) {
     Registrador registrador = repositoryRegistrador.findById(candidatoDTO.getIdRegistrador())
         .orElseThrow(() -> new ResourceNotFoundException(
             "Registrador no encontrado con id: " + candidatoDTO.getIdRegistrador()));
@@ -68,6 +78,16 @@ public class ServiceCandidato implements IServiceCandidato {
     candidato.setRegistrador(registrador);
     candidato.setLista(lista);
     candidato.setPartido(partido);
+
+    try {
+      candidato.setFoto(foto.getBytes());
+      candidato.setFormularioE6(formularioE6.getBytes());
+      candidato.setCertificadoConsejoEstado(certificado.getBytes());
+      candidato.setCopiaCedula(cedula.getBytes());
+      candidato.setDocumentoAval(aval.getBytes());
+    } catch(IOException e) {
+      throw new BadRequestException("Error procesando las imagenes/archivos");
+    }
 
     return mapperCandidato.toResponseDTO(repositoryCandidato.save(candidato));
   }
@@ -111,7 +131,6 @@ public class ServiceCandidato implements IServiceCandidato {
 
     candidato.setNombre(candidatoDTO.getNombre());
     candidato.setNumero(candidatoDTO.getNumero());
-    candidato.setFotoUrl(candidatoDTO.getFotoUrl());
     candidato.setActivo(candidatoDTO.getActivo());
     candidato.setRegistrador(registrador);
     candidato.setLista(lista);
