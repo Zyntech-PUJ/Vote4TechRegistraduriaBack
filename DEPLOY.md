@@ -19,6 +19,98 @@ Este documento describe **todo lo necesario** para desplegar RegistraduriaBack s
 
 ---
 
+## Ejecución Local
+
+> Para probar el backend sin acceso a los VMs de producción.
+
+### Opción A — Full Docker con `docker-compose.yml` raíz (recomendado)
+
+El `docker-compose.yml` de la **raíz del workspace** levanta toda la infraestructura local:
+
+```bash
+# Desde la carpeta raíz ("Arquitectura de Software")
+docker compose up -d
+```
+
+Este backend queda disponible en **`http://localhost:8082`** (el compose raíz mapea el puerto interno 8080 al externo 8082 para evitar conflictos).
+
+Las credenciales de BD usadas por el compose raíz son:
+
+```
+DB_URL:      jdbc:postgresql://postgres:5432/vote4tech
+DB_USER:     postgres
+DB_PASSWORD: postgres123
+CORS_ALLOWED_ORIGINS: http://localhost:4200,http://localhost:4201
+```
+
+> Distintas a producción. Spring Boot con `ddl-auto=update` crea el schema automáticamente al iniciar. El `SeedConfig` puebla las tablas si están vacías.
+
+Para ver los logs:
+
+```bash
+docker compose logs -f registraduria-back
+```
+
+Para reconstruir solo este servicio (si hubo cambios de código Java):
+
+```bash
+docker compose up -d --build registraduria-back
+```
+
+---
+
+### Opción B — `mvn spring-boot:run` directo (para desarrollo Java)
+
+Útil cuando se quiere ejecutar el backend directamente con Maven para usar el debugger de IDE o ver stack traces sin Docker.
+
+**Paso 1 — Levantar solo la base de datos:**
+
+```bash
+# Desde la carpeta raíz del workspace
+docker compose up -d postgres
+```
+
+PostgreSQL queda en `localhost:5432`, DB: `vote4tech`, user: `postgres`, pass: `postgres123`.
+
+**Paso 2 — Exportar variables de entorno y arrancar:**
+
+En Linux/Mac:
+
+```bash
+cd Vote4TechRegistraduriaBack
+export DB_URL="jdbc:postgresql://localhost:5432/vote4tech"
+export DB_USER="postgres"
+export DB_PASSWORD="postgres123"
+export CORS_ALLOWED_ORIGINS="http://localhost:4200"
+mvn spring-boot:run
+```
+
+En Windows (PowerShell):
+
+```powershell
+cd Vote4TechRegistraduriaBack
+$env:DB_URL = "jdbc:postgresql://localhost:5432/vote4tech"
+$env:DB_USER = "postgres"
+$env:DB_PASSWORD = "postgres123"
+$env:CORS_ALLOWED_ORIGINS = "http://localhost:4200"
+mvn spring-boot:run
+```
+
+El backend arranca en `http://localhost:8080` (puerto por defecto de `application.properties`).
+
+> ⚠ Si usas el backend local con `ng serve` de RegistraduriaFront, ajusta el proxy:
+> - Con `mvn spring-boot:run` → el backend está en **8080** → usa `proxy.conf.local.json` cambiando `target` a `http://localhost:8080`
+> - Con `docker compose up` → el backend está en **8082** → usa `proxy.conf.local.json` tal como está
+
+**Paso 3 — Verificar que arrancó correctamente:**
+
+```bash
+curl http://localhost:8080/eleccion/elecciones
+# Debe devolver un array JSON (puede estar vacío si el seed aún no corrió)
+```
+
+---
+
 ## Variables de Entorno Críticas
 
 El archivo `docker/docker-compose.prod.yml` contiene todas las variables de entorno. Las más importantes:
