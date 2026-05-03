@@ -1,377 +1,395 @@
-# Guía de Despliegue — RegistraduriaBack
+﻿# Guía de Despliegue — RegistraduriaBack
 
-Este documento describe el despliegue de **RegistraduriaBack** y la configuración del VM de bases de datos compartido por todo el sistema Vote4Tech.
+Este documento describe **todo lo necesario** para desplegar RegistraduriaBack sin problemas, incluyendo los errores conocidos que ya ocurrieron y cómo resolverlos.
 
----
-
-## Infraestructura Completa del Sistema
-
-| Servicio              | VM Producción    | VM QA            | Puerto |
-|-----------------------|------------------|------------------|--------|
-| RegistraduriaFront    | `10.43.97.237`   | `10.43.97.232`   | `80`   |
-| VotacionFront         | `10.43.97.237`   | `10.43.97.232`   | `4201` |
-| **RegistraduriaBack** | `10.43.100.131`  | `10.43.99.3`     | `8080` |
-| VotacionBack          | `10.43.100.131`  | `10.43.99.3`     | `8081` |
-| PostgreSQL            | `10.43.101.13`   | `10.43.98.254`   | `5432` |
-| CouchDB               | `10.43.101.13`   | `10.43.98.254`   | `5984` |
-
-> Todos los servicios corren como **contenedores Docker**. Los dos frontends comparten la VM de frontends en puertos distintos; igual los backends; y las bases de datos comparten un tercer VM.
-
-El acceso externo se realiza mediante **Cloudflare Quick Tunnel** (URL temporal generada automáticamente en cada arranque).
+> **RegistraduriaBack** es una aplicación Spring Boot que corre en el VM de backends (`10.43.100.131`) en el **puerto 8080**.
 
 ---
 
-## Acceso a los VMs
+## Infraestructura del Sistema
 
-### SSH
-
-```bash
-ssh estudiante@10.43.101.13    # VM Bases de datos
-ssh estudiante@10.43.100.131   # VM Backends
-ssh estudiante@10.43.97.237    # VM Frontends
-```
-
-En Windows, abrir **PowerShell** o **CMD** para usar `ssh` (ya viene instalado en Windows 10/11).
-
-### Escritorio Remoto (RDP / xrdp)
-
-1. `Win + R` → `mstsc` → ingresar la IP del VM deseado
-2. Usuario: `estudiante`, contraseña del VM
-3. Abrir una terminal desde el escritorio
+| Servicio               | VM Producción    | Puerto |
+|------------------------|------------------|--------|
+| RegistraduriaFront     | `10.43.97.237`   | `8090` |
+| VotacionFront          | `10.43.97.237`   | `4201` |
+| **RegistraduriaBack**  | `10.43.100.131`  | `8080` |
+| VotacionBack           | `10.43.100.131`  | `8081` |
+| PostgreSQL             | `10.43.101.13`   | `5432` |
+| CouchDB                | `10.43.101.13`   | `5984` |
 
 ---
 
-## Pre-requisitos
+## Variables de Entorno Críticas
 
-**Docker y Docker Compose** deben estar instalados en los tres VMs. Verificar en cada uno:
+El archivo `docker/docker-compose.prod.yml` contiene todas las variables de entorno. Las más importantes:
 
-```bash
-docker --version
-docker compose version
-```
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `SPRING_DATASOURCE_URL` | URL de PostgreSQL | `jdbc:postgresql://10.43.101.13:5432/registraduria` |
+| `SPRING_DATASOURCE_USERNAME` | Usuario de BD | (ver archivo) |
+| `SPRING_DATASOURCE_PASSWORD` | Contraseña de BD | (ver archivo) |
+| `CORS_ALLOWED_ORIGINS` | Orígenes permitidos | `http://10.43.97.237:8090,https://xxxx.trycloudflare.com` |
+| `JWT_SECRET` | Clave para firmar JWT | (ver archivo) |
 
----
-
-## Paso 1 — VM de Bases de Datos (`10.43.101.13`)
-
-> Este paso es compartido con VotacionBack. Si el VM de BDs ya está levantado y los contenedores corren, pasar directamente al Paso 2.
-
-Conectarse por SSH:
-
-```bash
-ssh estudiante@10.43.101.13
-```
-
-### 1.1 Crear el directorio y archivo de configuración
-
-```bash
-mkdir -p ~/vote4tech-db
-cat > ~/vote4tech-db/docker-compose.db.yml << 'EOF'
-services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: vote4tech-postgres
-    environment:
-      POSTGRES_DB: bd_nacional_vote4tech
-      POSTGRES_USER: admin_db_nacional
-      POSTGRES_PASSWORD: "12345"
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  couchdb:
-    image: couchdb:3
-    container_name: vote4tech-couchdb
-    environment:
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: admin123
-    ports:
-      - "5984:5984"
-    volumes:
-      - couchdb_data:/opt/couchdb/data
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-  couchdb_data:
-EOF
-```
-
-### 1.2 Levantar las bases de datos
-
-```bash
-cd ~/vote4tech-db
-docker compose -f docker-compose.db.yml up -d
-```
-
-Verificar que ambos contenedores están corriendo:
-
-```bash
-docker ps
-```
-
-Deben aparecer `vote4tech-postgres` y `vote4tech-couchdb`.
-
-Verificar CouchDB:
-
-```bash
-curl http://localhost:5984/
-# debe devolver: {"couchdb":"Welcome",...}
-```
-
-### 1.3 Crear bases de datos en CouchDB (solo la primera vez)
-
-```bash
-curl -X PUT http://admin:admin123@localhost:5984/votos_urna
-curl -X PUT http://admin:admin123@localhost:5984/votos_domicilio
-```
+> **`CORS_ALLOWED_ORIGINS` debe incluir siempre:**
+> 1. `http://10.43.97.237:8090` — acceso directo por IP (para desarrollo y QA)
+> 2. La URL de Cloudflare actual de RegistraduriaFront (para acceso externo)
 
 ---
 
-## Paso 2 — RegistraduriaBack (`10.43.100.131`, puerto 8080)
+## Despliegue Completo (Primera Vez)
 
-Conectarse por SSH al VM de backends:
+### Prerequisitos
 
-```bash
-ssh estudiante@10.43.100.131
-```
+- PostgreSQL corriendo en `10.43.101.13:5432` con la base de datos `registraduria` creada y el schema inicializado.
+- Acceso SSH al VM `10.43.100.131`.
 
-Si hay un servicio systemd antiguo que ocupa el puerto 8080, deshabilitarlo primero:
-
-```bash
-sudo systemctl stop vote4tech-back.service
-sudo systemctl disable vote4tech-back.service
-```
-
-Verificar que el puerto quedó libre:
+### Paso 1 — Limpiar contenedores anteriores (VM `10.43.100.131`)
 
 ```bash
-sudo ss -tlnp | grep 8080
+docker rm -f vote4tech-registraduria-back
 ```
 
-### 2.1 Subir el código
-
-**Opción A — git:**
+### Paso 2 — Clonar el repositorio (VM `10.43.100.131`)
 
 ```bash
 cd ~
-git clone <URL_DEL_REPOSITORIO> Vote4TechRegistraduriaBack
-# o si ya existe:
-cd ~/Vote4TechRegistraduriaBack && git pull
+git clone https://github.com/Zyntech-PUJ/Vote4TechRegistraduriaBack.git
 ```
 
-**Opción B — PowerShell local (Windows):**
-
-```powershell
-robocopy "C:\ruta\al\Vote4TechRegistraduriaBack" "$env:TEMP\rback-deploy" /E /XD target .git
-scp -r "$env:TEMP\rback-deploy" estudiante@10.43.100.131:~/Vote4TechRegistraduriaBack
-```
-
-### 2.2 Configurar variables de entorno
-
-Editar `docker/docker-compose.prod.yml`. El único valor que cambia en cada despliegue es `CORS_ALLOWED_ORIGINS` (se actualiza en el Paso 3 con el URL real de Cloudflare):
+Si la carpeta ya existe:
 
 ```bash
-nano ~/Vote4TechRegistraduriaBack/docker/docker-compose.prod.yml
+cd ~/Vote4TechRegistraduriaBack
+git pull
 ```
 
-Variables pre-configuradas para producción:
+### Paso 3 — Configurar variables de entorno
+
+**Desde tu PC (PowerShell)**, editar `Vote4TechRegistraduriaBack\docker\docker-compose.prod.yml`:
 
 ```yaml
-DB_URL: jdbc:postgresql://10.43.101.13:5432/bd_nacional_vote4tech
-DB_USER: admin_db_nacional
-DB_PASSWORD: "12345"
-CORS_ALLOWED_ORIGINS: "http://10.43.97.237,https://TU_URL.trycloudflare.com"
+environment:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://10.43.101.13:5432/registraduria"
+  SPRING_DATASOURCE_USERNAME: "postgres"
+  SPRING_DATASOURCE_PASSWORD: "tu_password"
+  CORS_ALLOWED_ORIGINS: "http://10.43.97.237:8090,https://TU_URL_CLOUDFLARE.trycloudflare.com"
+  JWT_SECRET: "tu_jwt_secret"
 ```
 
-> **Primera vez:** dejar `CORS_ALLOWED_ORIGINS` con un valor temporal; se actualiza después del Paso 3.
+> La URL de Cloudflare de RegistraduriaFront se obtiene con:
+> ```bash
+> docker logs vote4tech-cloudflared 2>&1 | grep trycloudflare
+> # (en el VM 10.43.97.237)
+> ```
 
-### 2.3 Levantar el contenedor
+### Paso 4 — Copiar el docker-compose al VM (desde tu PC, PowerShell)
+
+```powershell
+$base = "C:\Users\javie\OneDrive\Documentos\unijaveriana\SEMESTRE 7\Arquitectura de Software\Vote4TechRegistraduriaBack"
+scp "$base\docker\docker-compose.prod.yml" estudiante@10.43.100.131:~/Vote4TechRegistraduriaBack/docker/docker-compose.prod.yml
+```
+
+### Paso 5 — Construir y levantar (VM `10.43.100.131`)
+
+**Primera vez o cuando hay cambios de código Java:**
 
 ```bash
 cd ~/Vote4TechRegistraduriaBack
 docker compose -f docker/docker-compose.prod.yml up -d --build
 ```
 
-Verificar que levantó correctamente:
+La primera vez tarda varios minutos (descarga Maven, compila). Para ver el progreso:
 
 ```bash
-docker ps
-docker logs vote4tech-registraduria-back --tail=20
+docker logs -f vote4tech-registraduria-back
 ```
 
-Debe aparecer al final: `Started PortalRegistraduriaBackApplication in X.X seconds`
-
----
-
-## Paso 3 — Cloudflare URL y CORS
-
-El túnel de Cloudflare lo gestiona el contenedor `vote4tech-cloudflared` de RegistraduriaFront. Después de desplegarlo (ver `DEPLOY.md` en `Vote4TechRegistraduriaFront`), obtener el URL desde el VM Frontend:
-
-```bash
-# Ejecutar en el VM 10.43.97.237:
-docker logs vote4tech-cloudflared 2>&1 | grep trycloudflare
+Esperar hasta ver:
+```
+Started RegistraduriaBackApplication in X.XXX seconds
 ```
 
-El URL tiene la forma `https://xxxx-xxxx-xxxx-xxxx.trycloudflare.com`.
-
-### 3.1 Actualizar CORS
-
-De vuelta en el VM Backend (`10.43.100.131`), editar y reconstruir:
+Verificar que está corriendo:
 
 ```bash
-nano ~/Vote4TechRegistraduriaBack/docker/docker-compose.prod.yml
-# Actualizar CORS_ALLOWED_ORIGINS con el URL real
-
-cd ~/Vote4TechRegistraduriaBack
-docker compose -f docker/docker-compose.prod.yml up -d --build
-```
-
----
-
-## Paso 4 — Verificar el despliegue
-
-Desde el VM Backend (verifica que el API responde directamente):
-
-```bash
+docker ps | grep registraduria-back
 curl http://localhost:8080/eleccion/elecciones
 ```
 
-Desde el VM Frontend (verifica el API gateway de nginx):
+---
+
+## Actualizar solo Variables de Entorno (sin recompilar)
+
+Cuando solo cambia el `CORS_ALLOWED_ORIGINS` u otra variable de entorno (no cambia código Java):
+
+1. Editar `docker-compose.prod.yml` localmente
+2. Subir con `scp`
+3. En el VM:
 
 ```bash
-curl http://localhost/api/eleccion/elecciones
+cd ~/Vote4TechRegistraduriaBack
+docker compose -f docker/docker-compose.prod.yml up -d
 ```
 
-Ambos deben devolver un JSON con las elecciones.
+> **No hace falta `--build`** — Docker Compose simplemente recrea el contenedor con las nuevas variables sin recompilar.
 
 ---
 
-## Actualizar el Despliegue con Nuevos Cambios
+## Actualizar con Nuevos Cambios de Código Java
 
-Conectarse al VM Backend (`10.43.100.131`):
-
-**Opción A — git:**
+Cuando hay cambios en el código Java (`.java`, `pom.xml`, etc.):
 
 ```bash
+# En el VM 10.43.100.131
 cd ~/Vote4TechRegistraduriaBack
 git pull
 docker compose -f docker/docker-compose.prod.yml up -d --build
 ```
 
-**Opción B — código manual (desde PowerShell local):**
+> **`--build` es obligatorio** cuando hay cambios de código — Docker compila el proyecto Maven dentro del contenedor.
 
-```powershell
-robocopy "C:\ruta\al\Vote4TechRegistraduriaBack" "$env:TEMP\rback-deploy" /E /XD target .git
-scp -r "$env:TEMP\rback-deploy" estudiante@10.43.100.131:~/Vote4TechRegistraduriaBack
-```
+---
 
-Luego en el VM:
+## Actualizar la URL de Cloudflare en CORS (flujo habitual)
+
+Esta es la operación más frecuente. Ocurre cada vez que el contenedor de cloudflared de RegistraduriaFront se reinicia.
+
+1. **Obtener la nueva URL** (VM `10.43.97.237`):
+   ```bash
+   docker logs vote4tech-cloudflared 2>&1 | grep trycloudflare
+   ```
+
+2. **Editar localmente** `Vote4TechRegistraduriaBack\docker\docker-compose.prod.yml`:
+   ```yaml
+   CORS_ALLOWED_ORIGINS: "http://10.43.97.237:8090,https://NUEVA_URL.trycloudflare.com"
+   ```
+
+3. **Subir al VM** (PowerShell local):
+   ```powershell
+   $base = "C:\Users\javie\OneDrive\Documentos\unijaveriana\SEMESTRE 7\Arquitectura de Software\Vote4TechRegistraduriaBack"
+   scp "$base\docker\docker-compose.prod.yml" estudiante@10.43.100.131:~/Vote4TechRegistraduriaBack/docker/docker-compose.prod.yml
+   ```
+
+4. **Reiniciar contenedor** (VM `10.43.100.131`):
+   ```bash
+   cd ~/Vote4TechRegistraduriaBack
+   docker compose -f docker/docker-compose.prod.yml up -d
+   ```
+
+---
+
+## Problemas Conocidos y Soluciones
+
+### Problema: Error CORS en el navegador desde Cloudflare URL
+
+**Síntoma:** `Access to XMLHttpRequest ... has been blocked by CORS policy`.
+
+**Causa:** La URL de Cloudflare de RegistraduriaFront cambió (el contenedor `vote4tech-cloudflared` fue reiniciado) y no se actualizó `CORS_ALLOWED_ORIGINS`.
+
+**Solución:** Seguir el flujo de "Actualizar la URL de Cloudflare en CORS" descrito arriba.
+
+**Nota importante:** El valor `http://10.43.97.237:8090` debe estar siempre en la lista, incluso cuando se agrega la URL de Cloudflare. Sin él, el acceso directo por IP al frontend también da CORS.
+
+---
+
+### Problema: Login devuelve 401 o 403 en vez de JWT
+
+**Síntoma:** POST a `/registrador/login` devuelve 401 o 403 con body vacío.
+
+**Causa posible 1:** Las credenciales no existen en la BD. Verificar con:
 
 ```bash
-cd ~/Vote4TechRegistraduriaBack
+# Conectar a PostgreSQL en 10.43.101.13
+psql -h 10.43.101.13 -U postgres -d registraduria -c "SELECT usuario FROM registrador;"
+```
+
+Credenciales de prueba que deben existir (creadas por el seed):
+- Registrador: usuario `test123`, contraseña `12345`
+- Admin Electoral: usuario `adminElectoral`, contraseña `admin2026`
+- Consejo Nacional: usuario `consejoNacional`, contraseña `consejo2026`
+
+**Causa posible 2:** JWT_SECRET no está configurado. Verificar en los logs:
+
+```bash
+docker logs vote4tech-registraduria-back | grep -i "jwt\|secret\|error" | tail -20
+```
+
+---
+
+### Problema: Contenedor reinicia en bucle (`Restarting`)
+
+**Síntoma:** `docker ps` muestra el contenedor con estado `Restarting`.
+
+**Diagnóstico:**
+
+```bash
+docker logs vote4tech-registraduria-back --tail=30
+```
+
+**Causas comunes:**
+- No puede conectar a PostgreSQL (`Connection refused` o `Unknown host`)
+- Variable de entorno mal configurada (contraseña incorrecta, URL mal formada)
+- Puerto 8080 ya ocupado por otro proceso
+
+**Solución para cada caso:**
+
+```bash
+# Verificar conectividad a la BD
+curl -v telnet://10.43.101.13:5432
+
+# Ver si el puerto está ocupado
+sudo lsof -i :8080
+
+# Liberar el puerto si es necesario
+sudo fuser -k 8080/tcp
+```
+
+---
+
+### Problema: `git pull` sobreescribe el `docker-compose.prod.yml` con variables vacías
+
+**Causa:** El archivo con las credenciales reales no está en el repositorio (está en `.gitignore` o tiene variables de template). El `git pull` restaura la versión template.
+
+**Solución:** Siempre copiar el archivo correcto con `scp` **después** de hacer `git pull`, no antes.
+
+Orden correcto:
+1. `git pull`
+2. `scp docker-compose.prod.yml` (copia el tuyo con las credenciales reales)
+3. `docker compose up -d --build` (o sin `--build` si solo cambiaron variables)
+
+---
+
+### Problema: La app construye pero no responde en el puerto 8080
+
+**Síntoma:** `docker ps` muestra el contenedor `Up`, pero `curl http://localhost:8080/...` da `Connection refused`.
+
+**Causa:** Spring Boot todavía está arrancando. Puede tardar 30-60 segundos en estar listo.
+
+**Verificar:**
+
+```bash
+docker logs vote4tech-registraduria-back | grep "Started"
+# Debe aparecer: Started RegistraduriaBackApplication in X.XXX seconds
+```
+
+---
+
+## Comandos de Diagnóstico Rápido
+
+```bash
+# Ver todos los contenedores
+docker ps
+
+# Ver logs del backend
+docker logs vote4tech-registraduria-back --tail=50
+
+# Ver logs en tiempo real
+docker logs -f vote4tech-registraduria-back
+
+# Test rápido del endpoint de elecciones (sin auth)
+curl http://localhost:8080/eleccion/elecciones
+
+# Test del endpoint de login
+curl -X POST http://localhost:8080/registrador/login \
+  -H "Content-Type: application/json" \
+  -d '{"usuario":"test123","password":"12345"}'
+
+# Ver variables de entorno del contenedor
+docker inspect vote4tech-registraduria-back | grep -A 30 '"Env"'
+
+# Reiniciar el contenedor (sin recompilar)
+docker compose -f docker/docker-compose.prod.yml restart
+
+# Reconstruir desde cero (con recompilación)
+docker compose -f docker/docker-compose.prod.yml down
 docker compose -f docker/docker-compose.prod.yml up -d --build
 ```
 
-> `--build` es obligatorio. Sin él, Docker usa la imagen cacheada y los cambios no se aplican.
+---
+
+## Configuración del Dockerfile (multi-stage)
+
+El `Dockerfile` tiene **2 etapas**. La primera compila el proyecto Java; la segunda crea la imagen final mínima.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ETAPA 1: builder  (imagen maven:3.9-eclipse-temurin-21)    │
+│                                                             │
+│  1. COPY pom.xml .                                          │
+│  2. RUN mvn dependency:go-offline  ← descarga deps Maven   │
+│     (cacheado si pom.xml no cambió)                         │
+│  3. COPY src ./src                 ← copia el código Java   │
+│  4. RUN mvn package -DskipTests    ← compila el .jar        │
+│                                                             │
+│  Resultado: /app/target/PortalRegistraduriaBack-0.0.1-SNAPSHOT.jar │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ solo se copia el .jar compilado
+┌──────────────────────▼──────────────────────────────────────┐
+│  ETAPA 2: production  (imagen eclipse-temurin:21-jre-alpine) │
+│                                                             │
+│  1. COPY app.jar .                                          │
+│  2. EXPOSE 8080                                             │
+│  3. ENTRYPOINT ["java", "-jar", "app.jar"]                  │
+│                                                             │
+│  Imagen final: ~200 MB (solo JRE + .jar)                    │
+│  El Maven + código fuente nunca llega a la imagen final     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**¿Por qué el primer build tarda tanto?**
+- Docker descarga `maven:3.9-eclipse-temurin-21` (~500 MB) y `temurin:21-jre-alpine` (~200 MB)
+- `mvn dependency:go-offline` descarga todas las dependencias de Maven (~100-300 MB según el proyecto)
+
+**¿Por qué los builds siguientes son más rápidos?**
+- Si `pom.xml` no cambió, Docker reutiliza la capa cacheada de `dependency:go-offline`
+- Solo recompila desde `COPY src` en adelante
+
+**¿Cuándo es obligatorio `--build`?**
+- Cualquier cambio en archivos `.java`
+- Cualquier cambio en `pom.xml`
+- Cuando se agrega `SecurityConfig.java` u otro archivo Java nuevo
+
+**¿Cuándo NO hace falta `--build`?**
+- Cuando solo cambian variables de entorno en `docker-compose.prod.yml` (CORS, contraseñas, etc.)
+- En ese caso `docker compose up -d` recrea el contenedor con los nuevos env vars sin recompilar
+
+---
+
+## Gestión de Imágenes Docker
+
+```bash
+# Ver todas las imágenes locales
+docker images
+
+# Ver solo la imagen de este proyecto
+docker images | grep vote4tech-registraduria
+
+# Eliminar imágenes intermedias sin usar (dangling)
+docker image prune
+
+# Ver cuánto espacio usa Docker
+docker system df
+
+# Limpieza completa (cuidado: elimina imágenes cacheadas)
+docker system prune
+```
+
+Si el VM se queda sin espacio en disco:
+
+```bash
+# Verificar espacio disponible
+df -h
+
+# Ver qué ocupa más en Docker
+docker system df -v
+
+# Liberar imágenes intermedias (seguro, no afecta contenedores activos)
+docker image prune -f
+```
+
+> La imagen de build (`maven:3.9-eclipse-temurin-21`) es la más pesada. Si el disco lo permite, dejarla en caché para que futuros `--build` no descarguen todo desde cero.
 
 ---
 
 ## Ambiente QA
-
-El ambiente QA usa VMs distintas. Los pasos son idénticos, cambiando solo las IPs.
-
-| Servicio              | VM Producción    | VM QA            | Puerto |
-|-----------------------|------------------|------------------|--------|
-| RegistraduriaFront    | `10.43.97.237`   | `10.43.97.232`   | `80`   |
-| VotacionFront         | `10.43.97.237`   | `10.43.97.232`   | `4201` |
-| RegistraduriaBack     | `10.43.100.131`  | `10.43.99.3`     | `8080` |
-| VotacionBack          | `10.43.100.131`  | `10.43.99.3`     | `8081` |
-| PostgreSQL            | `10.43.101.13`   | `10.43.98.254`   | `5432` |
-| CouchDB               | `10.43.101.13`   | `10.43.98.254`   | `5984` |
-
-### Cambios en VM de BDs QA (`10.43.98.254`)
-
-Seguir el Paso 1 con esta IP en lugar de `10.43.101.13`.
-
-### Cambios en VM Backend QA (`10.43.99.3`)
-
-En `docker/docker-compose.prod.yml`, cambiar:
-
-```yaml
-DB_URL: jdbc:postgresql://10.43.98.254:5432/bd_nacional_vote4tech
-CORS_ALLOWED_ORIGINS: "http://10.43.97.232,https://URL_QA.trycloudflare.com"
-```
-
-Luego reconstruir:
-
-```bash
-docker compose -f docker/docker-compose.prod.yml up -d --build
-```
-
-### Cambios en VM Frontend QA (`10.43.97.232`)
-
-En `docker/nginx.conf` de RegistraduriaFront, cambiar el `proxy_pass`:
-
-```nginx
-# De:
-proxy_pass http://10.43.100.131:8080/;
-# A:
-proxy_pass http://10.43.99.3:8080/;
-```
-
-Reconstruir:
-
-```bash
-cd ~/Vote4TechRegistraduriaFront
-docker compose -f docker/docker-compose.prod.yml up -d --build
-```
-
-> Obtener el nuevo URL de Cloudflare del VM Frontend QA y actualizar `CORS_ALLOWED_ORIGINS` en el backend QA.
-
----
-
-## Troubleshooting
-
-### El contenedor no levanta / se reinicia constantemente
-
-```bash
-docker logs vote4tech-registraduria-back --tail=50
-```
-
-Causas comunes:
-- `DB_URL` incorrecto → verificar que PostgreSQL está corriendo en `10.43.101.13:5432`
-- `CORS_ALLOWED_ORIGINS` con formato incorrecto
-
-### Puerto 8080 ocupado
-
-```bash
-sudo ss -tlnp | grep 8080
-sudo kill -9 $(sudo lsof -t -i:8080)
-```
-
-### No conecta a PostgreSQL
-
-Verificar desde el VM Backend:
-
-```bash
-nc -zv 10.43.101.13 5432
-```
-
-Si no conecta, verificar que el contenedor PostgreSQL está corriendo en `10.43.101.13`.
-
-### El URL de Cloudflare cambió
-
-1. Obtener el nuevo URL: `docker logs vote4tech-cloudflared 2>&1 | grep trycloudflare` (en VM Frontend)
-2. Actualizar `CORS_ALLOWED_ORIGINS` en `docker/docker-compose.prod.yml`
-3. `docker compose -f docker/docker-compose.prod.yml up -d --build`
-
-### Reconstruir completamente
-
-```bash
-cd ~/Vote4TechRegistraduriaBack
-docker compose -f docker/docker-compose.prod.yml down
-docker compose -f docker/docker-compose.prod.yml up -d --build
-```
