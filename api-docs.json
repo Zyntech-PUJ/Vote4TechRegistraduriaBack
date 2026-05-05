@@ -680,17 +680,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Candidato encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseCandidatoDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Candidato no encontrado",
+            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
@@ -730,17 +720,7 @@
         },
         "responses": {
           "200": {
-            "description": "Candidato actualizado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseCandidatoDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Candidato, registrador, lista o partido no encontrado",
+            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
@@ -769,11 +749,8 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Candidato eliminado"
-          },
-          "404": {
-            "description": "Candidato no encontrado"
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1456,17 +1433,7 @@
         },
         "responses": {
           "200": {
-            "description": "Candidato creado exitosamente",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseCandidatoDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Registrador, lista o partido no encontrado",
+            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
@@ -1823,7 +1790,7 @@
           "200": {
             "description": "Registro obtenido exitosamente",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1834,7 +1801,7 @@
           "404": {
             "description": "Partido no encontrado",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1867,7 +1834,7 @@
           "200": {
             "description": "Plataforma ideologica obtenida exitosamente",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1878,7 +1845,7 @@
           "404": {
             "description": "Partido no encontrado",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1911,7 +1878,7 @@
           "200": {
             "description": "Logo obtenido exitosamente",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1922,7 +1889,7 @@
           "404": {
             "description": "Partido no encontrado",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1955,7 +1922,7 @@
           "200": {
             "description": "Estatutos obtenidos exitosamente",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1966,7 +1933,7 @@
           "404": {
             "description": "Partido no encontrado",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -1999,7 +1966,7 @@
           "200": {
             "description": "Certificado obtenido exitosamente",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -2010,7 +1977,7 @@
           "404": {
             "description": "Partido no encontrado",
             "content": {
-              "application/octet-stream": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
@@ -2248,6 +2215,171 @@
                   "items": {
                     "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/foto": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener foto del candidato por ID",
+        "operationId": "obtenerFotoById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/formulario-e6": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener formulario E6 del candidato por ID",
+        "operationId": "obtenerFormularioE6ById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/certificado": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener certificado del candidato por ID",
+        "operationId": "obtenerCertificadoById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/cedula": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener copia de cédula del candidato por ID",
+        "operationId": "obtenerCopiaCedulaById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/aval": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener documento aval del candidato por ID",
+        "operationId": "obtenerDocumentoAvalById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
                 }
               }
             }
