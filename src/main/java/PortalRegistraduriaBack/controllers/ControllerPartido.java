@@ -3,6 +3,7 @@ package PortalRegistraduriaBack.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,56 @@ public class ControllerPartido {
   @GetMapping("/{idPartido}")
   public ResponseEntity<ResponsePartidoDTO> obtenerPartidoById(@PathVariable Long idPartido) {
     return ResponseEntity.ok(servicePartido.findById(idPartido));
+  }
+
+  @Operation(summary = "Obtener logo del partido por ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Logo obtenido exitosamente"),
+      @ApiResponse(responseCode = "404", description = "Partido no encontrado")
+  })
+  @GetMapping(value = "/{idPartido}/logo", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> obtenerLogoById(@PathVariable Long idPartido) {
+    return ResponseEntity.ok(servicePartido.findLogoById(idPartido));
+  }
+
+  @Operation(summary = "Obtener estatutos del partido por ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Estatutos obtenidos exitosamente"),
+      @ApiResponse(responseCode = "404", description = "Partido no encontrado")
+  })
+  @GetMapping(value = "/{idPartido}/estatutos", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> obtenerEstatutosById(@PathVariable Long idPartido) {
+    return ResponseEntity.ok(servicePartido.findEstatutosById(idPartido));
+  }
+
+  @Operation(summary = "Obtener plataforma ideologica del partido por ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Plataforma ideologica obtenida exitosamente"),
+      @ApiResponse(responseCode = "404", description = "Partido no encontrado")
+  })
+  @GetMapping(value = "/{idPartido}/plataforma", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> obtenerPlataformaIdeologicaById(@PathVariable Long idPartido) {
+    return ResponseEntity.ok(servicePartido.findPlataformaIdeologicaById(idPartido));
+  }
+
+  @Operation(summary = "Obtener registro de afiliados y directivos del partido por ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Registro obtenido exitosamente"),
+      @ApiResponse(responseCode = "404", description = "Partido no encontrado")
+  })
+  @GetMapping(value = "/{idPartido}/registro", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> obtenerRegistroAfiliadosDirectivosById(@PathVariable Long idPartido) {
+    return ResponseEntity.ok(servicePartido.findRegistroAfiliadosDirectivosById(idPartido));
+  }
+
+  @Operation(summary = "Obtener certificado de representatividad del partido por ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Certificado obtenido exitosamente"),
+      @ApiResponse(responseCode = "404", description = "Partido no encontrado")
+  })
+  @GetMapping(value = "/{idPartido}/certificado", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> obtenerCertificadoRepresentatividadById(@PathVariable Long idPartido) {
+    return ResponseEntity.ok(servicePartido.findCertificadoRepresentatividadById(idPartido));
   }
 
   @Operation(summary = "Crear un nuevo partido")
