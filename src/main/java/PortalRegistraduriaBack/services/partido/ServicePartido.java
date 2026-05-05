@@ -78,5 +78,30 @@ public class ServicePartido implements IServicePartido {
   public void deleteById(Long id) {
     repositoryPartido.deleteById(id);
   }
+
+  @Override
+  public byte[] findLogoById(Long id) {
+    return repositoryPartido.findLogoById(id);
+  }
+
+  @Override
+  public byte[] findEstatutosById(Long id) {
+    return repositoryPartido.findEstatutosById(id);
+  }
+
+  @Override
+  public byte[] findPlataformaIdeologicaById(Long id) {
+    return repositoryPartido.findPlataformaIdeologicaById(id);
+  }
+
+  @Override
+  public byte[] findRegistroAfiliadosDirectivosById(Long id) {
+    return repositoryPartido.findRegistroAfiliadosDirectivosById(id);
+  }
+
+  @Override
+  public byte[] findCertificadoRepresentatividadById(Long id) {
+    return repositoryPartido.findCertificadoRepresentatividadById(id);
+  }
   
 }
