@@ -80,13 +80,19 @@ public class ServiceCandidato implements IServiceCandidato {
     candidato.setPartido(partido);
 
     try {
+      validatePdfFile(foto, "foto");
+      validatePdfFile(formularioE6, "formularioE6");
+      validatePdfFile(certificado, "certificado");
+      validatePdfFile(cedula, "cedula");
+      validatePdfFile(aval, "aval");
+
       candidato.setFoto(foto.getBytes());
       candidato.setFormularioE6(formularioE6.getBytes());
       candidato.setCertificadoConsejoEstado(certificado.getBytes());
       candidato.setCopiaCedula(cedula.getBytes());
       candidato.setDocumentoAval(aval.getBytes());
     } catch(IOException e) {
-      throw new BadRequestException("Error procesando las imagenes/archivos");
+      throw new BadRequestException("Error procesando los archivos PDF");
     }
 
     return mapperCandidato.toResponseDTO(repositoryCandidato.save(candidato));
@@ -116,6 +122,31 @@ public class ServiceCandidato implements IServiceCandidato {
     repositoryCandidato.deleteById(id);
   }
 
+  @Override
+  public byte[] findFotoById(Long id) {
+    return repositoryCandidato.findFotoById(id);
+  }
+
+  @Override
+  public byte[] findFormularioE6ById(Long id) {
+    return repositoryCandidato.findFormularioE6ById(id);
+  }
+
+  @Override
+  public byte[] findCertificadoConsejoEstadoById(Long id) {
+    return repositoryCandidato.findCertificadoConsejoEstadoById(id);
+  }
+
+  @Override
+  public byte[] findCopiaCedulaById(Long id) {
+    return repositoryCandidato.findCopiaCedulaById(id);
+  }
+
+  @Override
+  public byte[] findDocumentoAvalById(Long id) {
+    return repositoryCandidato.findDocumentoAvalById(id);
+  }
+
   private ResponseCandidatoDTO updateAndSaveCandidato(Candidato candidato, UpdateCandidatoDTO candidatoDTO) {
     Registrador registrador = repositoryRegistrador.findById(candidatoDTO.getIdRegistrador())
         .orElseThrow(() -> new ResourceNotFoundException(
@@ -137,6 +168,20 @@ public class ServiceCandidato implements IServiceCandidato {
     candidato.setPartido(partido);
 
     return mapperCandidato.toResponseDTO(repositoryCandidato.save(candidato));
+  }
+
+  private void validatePdfFile(MultipartFile file, String fieldName) {
+    if (file == null || file.isEmpty()) {
+      throw new BadRequestException("El archivo " + fieldName + " es obligatorio.");
+    }
+
+    String originalFilename = file.getOriginalFilename();
+    boolean isPdfByName = originalFilename != null && originalFilename.toLowerCase().endsWith(".pdf");
+    boolean isPdfByContentType = "application/pdf".equalsIgnoreCase(file.getContentType());
+
+    if (!isPdfByName && !isPdfByContentType) {
+      throw new BadRequestException("El archivo " + fieldName + " debe estar en formato PDF.");
+    }
   }
 
 }

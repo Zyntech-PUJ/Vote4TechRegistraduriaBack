@@ -12,6 +12,11 @@ public interface IServiceCandidato {
 
   public List<ResponseCandidatoDTO> findAll();
   public ResponseCandidatoDTO findById(Long id);
+  byte[] findFotoById(Long id);
+  byte[] findFormularioE6ById(Long id);
+  byte[] findCertificadoConsejoEstadoById(Long id);
+  byte[] findCopiaCedulaById(Long id);
+  byte[] findDocumentoAvalById(Long id);
   public ResponseCandidatoDTO addCandidato(
     CreateCandidatoDTO candidatoDTO,
     MultipartFile foto,

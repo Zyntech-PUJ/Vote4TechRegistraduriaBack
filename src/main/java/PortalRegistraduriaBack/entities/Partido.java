@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -44,29 +43,24 @@ public class Partido {
 
   // ARCHIVOS BINARIOS
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "logo")
+  @Column(name = "logo", columnDefinition = "bytea")
   private byte[] logo;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "estatutos")
+  @Column(name = "estatutos", columnDefinition = "bytea")
   private byte[] estatutos;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "plataforma_ideologica")
+  @Column(name = "plataforma_ideologica", columnDefinition = "bytea")
   private byte[] plataformaIdeologica;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "registro_afiliados_directivos")
+  @Column(name = "registro_afiliados_directivos", columnDefinition = "bytea")
   private byte[] registroAfiliadosDirectivos;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "certificado_representatividad")
+  @Column(name = "certificado_representatividad", columnDefinition = "bytea")
   private byte[] certificadoRepresentatividad;
 
   // RELACIONES ENTRE ENTIDADES

@@ -42,8 +42,14 @@ public class SecurityConfig {
 // ------------------------- END SECTION .permitAll() -------------------------
 // ------------------------- SECTION .hasAuthority(REGISTRADOR) -------------------------
 
-          .requestMatchers("/candidato/**").hasAuthority(TipoRol.REGISTRADOR.name())
-          .requestMatchers("/partido/**").hasAuthority(TipoRol.REGISTRADOR.name())
+          .requestMatchers("/candidato/**").hasAnyAuthority(
+            TipoRol.REGISTRADOR.name(),
+            TipoRol.CONSEJO_NACIONAL.name()
+          )
+          .requestMatchers("/partido/**").hasAnyAuthority(
+            TipoRol.REGISTRADOR.name(),
+            TipoRol.CONSEJO_NACIONAL.name()
+          )
           .requestMatchers("/registrador/**").hasAuthority(TipoRol.REGISTRADOR.name())
 
 // ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
@@ -65,8 +71,6 @@ public class SecurityConfig {
 // ------------------------- END SECTION .hasAuthority(REGISTRADOR) - CENTRO VOTACION Y MESA -------------------------
 // ------------------------- SECTION .hasAuthority(CONSEJO_NACIONAL) -------------------------
 
-          .requestMatchers("/candidato/**").hasAuthority(TipoRol.CONSEJO_NACIONAL.name())
-          .requestMatchers("/partido/**").hasAuthority(TipoRol.CONSEJO_NACIONAL.name())
           .requestMatchers("/consejo-nacional/**").hasAuthority(TipoRol.CONSEJO_NACIONAL.name())
 
 // ------------------------- END SECTION .hasAuthority(CONSEJO_NACIONAL) -------------------------

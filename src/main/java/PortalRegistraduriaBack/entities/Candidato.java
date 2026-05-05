@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -39,29 +38,24 @@ public class Candidato {
 
   // ARCHIVOS BINARIOS
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "foto")
+  @Column(name = "foto", columnDefinition = "bytea")
   private byte[] foto;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "formulario_e6")
+  @Column(name = "formulario_e6", columnDefinition = "bytea")
   private byte[] formularioE6;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "certificado_consejo_estado")
+  @Column(name = "certificado_consejo_estado", columnDefinition = "bytea")
   private byte[] certificadoConsejoEstado;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "cedula")
+  @Column(name = "cedula", columnDefinition = "bytea")
   private byte[] copiaCedula;
 
-  @Lob
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "documento_aval")
+  @Column(name = "documento_aval", columnDefinition = "bytea")
   private byte[] documentoAval;
 
   // RELACIONES ENTRE ENTIDADES
