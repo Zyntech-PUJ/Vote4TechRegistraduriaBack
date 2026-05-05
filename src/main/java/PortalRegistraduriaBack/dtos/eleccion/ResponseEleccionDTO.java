@@ -14,6 +14,10 @@ public class ResponseEleccionDTO {
   private String nombre;
   private LocalDateTime fechaInicio;
   private LocalDateTime fechaFinalizacion;
+  private LocalDateTime fechaInicioUrna;
+  private LocalDateTime fechaFinalizacionUrna;
+  private LocalDateTime fechaInicioDomicilio;
+  private LocalDateTime fechaFinalizacionDomicilio;
   private LocalDateTime fechaCreacion;
   private TipoEleccion tipo;
   private Boolean listaAbierta;

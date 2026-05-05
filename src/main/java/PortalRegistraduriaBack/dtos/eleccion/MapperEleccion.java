@@ -22,6 +22,10 @@ public class MapperEleccion {
     eleccion.setNombre(dto.getNombre());
     eleccion.setFechaInicio(dto.getFechaInicio());
     eleccion.setFechaFinalizacion(dto.getFechaFinalizacion());
+    eleccion.setFechaInicioUrna(dto.getFechaInicioUrna());
+    eleccion.setFechaFinalizacionUrna(dto.getFechaFinalizacionUrna());
+    eleccion.setFechaInicioDomicilio(dto.getFechaInicioDomicilio());
+    eleccion.setFechaFinalizacionDomicilio(dto.getFechaFinalizacionDomicilio());
     eleccion.setTipo(dto.getTipo());
     eleccion.setListaAbierta(dto.getListaAbierta());
 
@@ -36,6 +40,10 @@ public class MapperEleccion {
     eleccion.setNombre(dto.getNombre());
     eleccion.setFechaInicio(dto.getFechaInicio());
     eleccion.setFechaFinalizacion(dto.getFechaFinalizacion());
+    eleccion.setFechaInicioUrna(dto.getFechaInicioUrna());
+    eleccion.setFechaFinalizacionUrna(dto.getFechaFinalizacionUrna());
+    eleccion.setFechaInicioDomicilio(dto.getFechaInicioDomicilio());
+    eleccion.setFechaFinalizacionDomicilio(dto.getFechaFinalizacionDomicilio());
     eleccion.setTipo(dto.getTipo());
     eleccion.setListaAbierta(dto.getListaAbierta());
 
@@ -50,6 +58,10 @@ public class MapperEleccion {
     dto.setNombre(eleccion.getNombre());
     dto.setFechaInicio(eleccion.getFechaInicio());
     dto.setFechaFinalizacion(eleccion.getFechaFinalizacion());
+    dto.setFechaInicioUrna(eleccion.getFechaInicioUrna());
+    dto.setFechaFinalizacionUrna(eleccion.getFechaFinalizacionUrna());
+    dto.setFechaInicioDomicilio(eleccion.getFechaInicioDomicilio());
+    dto.setFechaFinalizacionDomicilio(eleccion.getFechaFinalizacionDomicilio());
     dto.setFechaCreacion(eleccion.getFechaCreacion());
     dto.setTipo(eleccion.getTipo());
     dto.setListaAbierta(eleccion.getListaAbierta());

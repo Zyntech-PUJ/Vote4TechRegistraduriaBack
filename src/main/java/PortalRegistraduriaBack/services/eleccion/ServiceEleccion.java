@@ -79,6 +79,10 @@ public class ServiceEleccion implements IServiceEleccion {
     eleccion.setNombre(eleccionDTO.getNombre());
     eleccion.setFechaInicio(eleccionDTO.getFechaInicio());
     eleccion.setFechaFinalizacion(eleccionDTO.getFechaFinalizacion());
+    eleccion.setFechaInicioUrna(eleccionDTO.getFechaInicioUrna());
+    eleccion.setFechaFinalizacionUrna(eleccionDTO.getFechaFinalizacionUrna());
+    eleccion.setFechaInicioDomicilio(eleccionDTO.getFechaInicioDomicilio());
+    eleccion.setFechaFinalizacionDomicilio(eleccionDTO.getFechaFinalizacionDomicilio());
     eleccion.setTipo(eleccionDTO.getTipo());
     eleccion.setListaAbierta(eleccionDTO.getListaAbierta());
     eleccion.setAdministradorElectoral(administradorElectoral);
