@@ -1801,6 +1801,226 @@
         }
       }
     },
+    "/partido/{idPartido}/registro": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener registro de afiliados y directivos del partido por ID",
+        "operationId": "obtenerRegistroAfiliadosDirectivosById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro obtenido exitosamente",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/plataforma": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener plataforma ideologica del partido por ID",
+        "operationId": "obtenerPlataformaIdeologicaById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plataforma ideologica obtenida exitosamente",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/logo": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener logo del partido por ID",
+        "operationId": "obtenerLogoById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logo obtenido exitosamente",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/estatutos": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener estatutos del partido por ID",
+        "operationId": "obtenerEstatutosById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estatutos obtenidos exitosamente",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/certificado": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener certificado de representatividad del partido por ID",
+        "operationId": "obtenerCertificadoRepresentatividadById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Certificado obtenido exitosamente",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/partido/partidos": {
       "get": {
         "tags": [
@@ -2188,10 +2408,32 @@
             "type": "string",
             "format": "date-time"
           },
+          "fechaInicioUrna": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFinalizacionUrna": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaInicioDomicilio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFinalizacionDomicilio": {
+            "type": "string",
+            "format": "date-time"
+          },
           "tipo": {
             "type": "string",
             "enum": [
+              "CONGRESO",
               "PRESIDENCIAL",
+              "GOBERNADORES",
+              "ALCALDES",
+              "CONCEJOS",
+              "ASAMBLEA",
+              "JUNTAS",
               "LEGISLATIVA",
               "CONSULTA"
             ]
@@ -2235,6 +2477,22 @@
             "type": "string",
             "format": "date-time"
           },
+          "fechaInicioUrna": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFinalizacionUrna": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaInicioDomicilio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFinalizacionDomicilio": {
+            "type": "string",
+            "format": "date-time"
+          },
           "fechaCreacion": {
             "type": "string",
             "format": "date-time"
@@ -2242,7 +2500,13 @@
           "tipo": {
             "type": "string",
             "enum": [
+              "CONGRESO",
               "PRESIDENCIAL",
+              "GOBERNADORES",
+              "ALCALDES",
+              "CONCEJOS",
+              "ASAMBLEA",
+              "JUNTAS",
               "LEGISLATIVA",
               "CONSULTA"
             ]
@@ -2508,10 +2772,32 @@
             "type": "string",
             "format": "date-time"
           },
+          "fechaInicioUrna": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFinalizacionUrna": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaInicioDomicilio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFinalizacionDomicilio": {
+            "type": "string",
+            "format": "date-time"
+          },
           "tipo": {
             "type": "string",
             "enum": [
+              "CONGRESO",
               "PRESIDENCIAL",
+              "GOBERNADORES",
+              "ALCALDES",
+              "CONCEJOS",
+              "ASAMBLEA",
+              "JUNTAS",
               "LEGISLATIVA",
               "CONSULTA"
             ]
