@@ -54,6 +54,18 @@ public class Eleccion {
   @Column(name = "lista_abierta", nullable = false)
   private Boolean listaAbierta;
 
+  @Column(name = "fecha_inicio_urna", nullable = false)
+  private LocalDateTime fechaInicioUrna;
+
+  @Column(name = "fecha_finalizacion_urna", nullable = false)
+  private LocalDateTime fechaFinalizacionUrna;
+
+  @Column(name = "fecha_inicio_domicilio", nullable = false)
+  private LocalDateTime fechaInicioDomicilio;
+
+  @Column(name = "fecha_finalizacion_domicilio", nullable = false)
+  private LocalDateTime fechaFinalizacionDomicilio;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "estado", nullable = false, length = 32)
   private EstadoEleccion estado;
