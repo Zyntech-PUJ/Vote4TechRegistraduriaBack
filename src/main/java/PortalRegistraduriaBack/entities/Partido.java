@@ -41,6 +41,9 @@ public class Partido {
   @Column(name = "fecha_creacion", nullable = false, updatable = false)
   private LocalDateTime fechaCreacion;
 
+  @Column(name = "activo", nullable = false)
+  private Boolean activo;
+
   // ARCHIVOS BINARIOS
 
   @Basic(fetch = FetchType.LAZY)

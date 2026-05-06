@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import PortalRegistraduriaBack.dtos.partido.CreatePartidoDTO;
 import PortalRegistraduriaBack.dtos.partido.MapperPartido;
 import PortalRegistraduriaBack.dtos.partido.ResponsePartidoDTO;
+import PortalRegistraduriaBack.dtos.partido.UpdatePartidoDTO;
 import PortalRegistraduriaBack.entities.Partido;
 import PortalRegistraduriaBack.entities.Registrador;
 import PortalRegistraduriaBack.exceptions.BadRequestException;
@@ -75,6 +76,24 @@ public class ServicePartido implements IServicePartido {
   }
 
   @Override
+  public ResponsePartidoDTO updatePartido(UpdatePartidoDTO partidoDTO) {
+    Partido partido = repositoryPartido.findById(partidoDTO.getIdPartido())
+      .orElseThrow(() -> new ResourceNotFoundException(
+        "Partido no encontrado con id: " + partidoDTO.getIdPartido()
+      ));
+
+    return updateAndSavePartido(partido, partidoDTO);
+  }
+
+  @Override
+  public ResponsePartidoDTO updatePartido(Long id, UpdatePartidoDTO partidoDTO) {
+    Partido partido = repositoryPartido.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Partido no encontrado con id: " + id));
+
+    return updateAndSavePartido(partido, partidoDTO);
+  }
+
+  @Override
   public void deleteById(Long id) {
     repositoryPartido.deleteById(id);
   }
@@ -102,6 +121,21 @@ public class ServicePartido implements IServicePartido {
   @Override
   public byte[] findCertificadoRepresentatividadById(Long id) {
     return repositoryPartido.findCertificadoRepresentatividadById(id);
+  }
+
+  private ResponsePartidoDTO updateAndSavePartido(Partido partido, UpdatePartidoDTO partidoDTO) {
+    Registrador registrador = repositoryRegistrador
+      .findById(partidoDTO.getIdRegistrador())
+      .orElseThrow(() -> new ResourceNotFoundException(
+        "Registrador no encontrado con id: " + partidoDTO.getIdRegistrador()
+      ));
+
+    partido.setNombre(partidoDTO.getNombre());
+    partido.setSigla(partidoDTO.getSigla());
+    partido.setActivo(partidoDTO.getActivo());
+    partido.setRegistrador(registrador);
+
+    return mapperPartido.toResponseDTO(repositoryPartido.save(partido));
   }
   
 }

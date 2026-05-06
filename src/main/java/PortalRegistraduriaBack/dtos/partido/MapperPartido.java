@@ -15,6 +15,19 @@ public class MapperPartido {
     Partido partido = new Partido();
     partido.setNombre(dto.getNombre());
     partido.setSigla(dto.getSigla());
+    partido.setActivo(dto.getActivo() != null ? dto.getActivo() : true);
+
+    return partido;
+  }
+
+  public Partido toEntity(UpdatePartidoDTO dto) {
+    if (dto == null) return null;
+
+    Partido partido = new Partido();
+    partido.setIdPartido(dto.getIdPartido());
+    partido.setNombre(dto.getNombre());
+    partido.setSigla(dto.getSigla());
+    partido.setActivo(dto.getActivo());
   
     return partido;
   }
@@ -26,7 +39,8 @@ public class MapperPartido {
     dto.setIdPartido(partido.getIdPartido());
     dto.setNombre(partido.getNombre());
     dto.setSigla(partido.getSigla());
-    dto.setIdRegistrador(partido.getRegistrador().getIdRegistrador());
+    dto.setActivo(partido.getActivo());
+    dto.setIdRegistrador(partido.getRegistrador() != null ? partido.getRegistrador().getIdRegistrador() : null);
 
     return dto;
   }

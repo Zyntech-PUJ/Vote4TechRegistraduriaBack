@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import PortalRegistraduriaBack.dtos.partido.CreatePartidoDTO;
 import PortalRegistraduriaBack.dtos.partido.ResponsePartidoDTO;
+import PortalRegistraduriaBack.dtos.partido.UpdatePartidoDTO;
 
 public interface IServicePartido {
   
@@ -24,6 +25,8 @@ public interface IServicePartido {
     MultipartFile registro,
     MultipartFile certificado
   );
+  public ResponsePartidoDTO updatePartido(UpdatePartidoDTO partidoDTO);
+  public ResponsePartidoDTO updatePartido(Long id, UpdatePartidoDTO partidoDTO);
 
   public void deleteById(Long id);
   

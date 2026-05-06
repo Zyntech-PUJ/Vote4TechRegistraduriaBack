@@ -167,6 +167,124 @@
         }
       }
     },
+    "/partido/{idPartido}": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener partido por ID",
+        "operationId": "obtenerPartidoById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Partido encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar partido por ID",
+        "operationId": "actualizarPartido",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePartidoDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Partido actualizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido o registrador no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Eliminar partido por ID",
+        "operationId": "eliminarPartido",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Partido eliminado"
+          },
+          "404": {
+            "description": "Partido no encontrado"
+          }
+        }
+      }
+    },
     "/mesa/{idMesa}": {
       "get": {
         "tags": [
@@ -1700,74 +1818,6 @@
         }
       }
     },
-    "/partido/{idPartido}": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener partido por ID",
-        "operationId": "obtenerPartidoById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Partido encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponsePartidoDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponsePartidoDTO"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Eliminar partido por ID",
-        "operationId": "eliminarPartido",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Partido eliminado"
-          },
-          "404": {
-            "description": "Partido no encontrado"
-          }
-        }
-      }
-    },
     "/partido/{idPartido}/registro": {
       "get": {
         "tags": [
@@ -2471,6 +2521,50 @@
           }
         }
       },
+      "UpdatePartidoDTO": {
+        "type": "object",
+        "properties": {
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ResponsePartidoDTO": {
+        "type": "object",
+        "properties": {
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "UpdateMesaDTO": {
         "type": "object",
         "properties": {
@@ -2846,24 +2940,8 @@
           "sigla": {
             "type": "string"
           },
-          "idRegistrador": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "ResponsePartidoDTO": {
-        "type": "object",
-        "properties": {
-          "idPartido": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "sigla": {
-            "type": "string"
+          "activo": {
+            "type": "boolean"
           },
           "idRegistrador": {
             "type": "integer",

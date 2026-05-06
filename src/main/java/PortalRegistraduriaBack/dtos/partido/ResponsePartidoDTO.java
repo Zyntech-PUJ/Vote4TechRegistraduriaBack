@@ -8,6 +8,7 @@ public class ResponsePartidoDTO {
   private Long idPartido;
   private String nombre;
   private String sigla;
+  private Boolean activo;
   private Long idRegistrador;
   
 }

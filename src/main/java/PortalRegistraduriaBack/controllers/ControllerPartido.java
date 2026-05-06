@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import PortalRegistraduriaBack.dtos.partido.CreatePartidoDTO;
 import PortalRegistraduriaBack.dtos.partido.ResponsePartidoDTO;
+import PortalRegistraduriaBack.dtos.partido.UpdatePartidoDTO;
 import PortalRegistraduriaBack.services.partido.IServicePartido;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -146,6 +149,19 @@ public class ControllerPartido {
         certificado
       )
     );
+  }
+
+  @Operation(summary = "Actualizar partido por ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Partido actualizado"),
+      @ApiResponse(responseCode = "404", description = "Partido o registrador no encontrado")
+  })
+  @PutMapping("/{idPartido}")
+  public ResponseEntity<ResponsePartidoDTO> actualizarPartido(
+    @PathVariable Long idPartido,
+    @RequestBody UpdatePartidoDTO partidoDTO
+  ) {
+    return ResponseEntity.ok(servicePartido.updatePartido(idPartido, partidoDTO));
   }
 
   @Operation(summary = "Eliminar partido por ID")

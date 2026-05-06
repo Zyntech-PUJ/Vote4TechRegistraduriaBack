@@ -527,6 +527,7 @@ public class SeedConfig {
         .nombre("Centro Democratico")
         .sigla("CD")
         .fechaCreacion(LocalDateTime.now())
+        .activo(true)
         .registrador(r1)
         .build();
 
