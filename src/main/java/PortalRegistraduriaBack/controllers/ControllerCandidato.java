@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -101,15 +102,8 @@ public class ControllerCandidato {
 
   @Operation(summary = "Crear un nuevo candidato")
   @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<ResponseCandidatoDTO> crearCandidato(
-      @RequestPart("data") CreateCandidatoDTO candidatoDTO,
-      @RequestPart("foto") MultipartFile foto,
-      @RequestPart("formularioE6") MultipartFile formularioE6,
-      @RequestPart("certificado") MultipartFile certificado,
-      @RequestPart("cedula") MultipartFile cedula,
-      @RequestPart("aval") MultipartFile aval) {
-    return ResponseEntity.ok(
-        serviceCandidato.addCandidato(candidatoDTO, foto, formularioE6, certificado, cedula, aval));
+  public ResponseEntity<ResponseCandidatoDTO> crearCandidato(@RequestPart("data") CreateCandidatoDTO candidatoDTO) {
+    return ResponseEntity.ok(serviceCandidato.addCandidato(candidatoDTO));
   }
 
   @Operation(summary = "Actualizar candidato por ID")
@@ -118,6 +112,51 @@ public class ControllerCandidato {
       @PathVariable Long idCandidato,
       @RequestBody UpdateCandidatoDTO candidatoDTO) {
     return ResponseEntity.ok(serviceCandidato.updateCandidato(idCandidato, candidatoDTO));
+  }
+
+  @Operation(summary = "Actualizar foto del candidato por ID")
+  @PatchMapping(value = "/{idCandidato}/foto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarFoto(
+      @PathVariable Long idCandidato,
+      @RequestPart("foto") MultipartFile foto) {
+    serviceCandidato.updateCandidatoFoto(idCandidato, foto);
+    return ResponseEntity.ok().build();
+  }
+
+  @Operation(summary = "Actualizar formulario E6 del candidato por ID")
+  @PatchMapping(value = "/{idCandidato}/formulario-e6", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarFormularioE6(
+      @PathVariable Long idCandidato,
+      @RequestPart("formularioE6") MultipartFile formularioE6) {
+    serviceCandidato.updateCandidatoFormularioE6(idCandidato, formularioE6);
+    return ResponseEntity.ok().build();
+  }
+
+  @Operation(summary = "Actualizar certificado del candidato por ID")
+  @PatchMapping(value = "/{idCandidato}/certificado", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarCertificado(
+      @PathVariable Long idCandidato,
+      @RequestPart("certificado") MultipartFile certificado) {
+    serviceCandidato.updateCandidatoCertificado(idCandidato, certificado);
+    return ResponseEntity.ok().build();
+  }
+
+  @Operation(summary = "Actualizar copia de cédula del candidato por ID")
+  @PatchMapping(value = "/{idCandidato}/cedula", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarCedula(
+      @PathVariable Long idCandidato,
+      @RequestPart("cedula") MultipartFile cedula) {
+    serviceCandidato.updateCandidatoCedula(idCandidato, cedula);
+    return ResponseEntity.ok().build();
+  }
+
+  @Operation(summary = "Actualizar documento aval del candidato por ID")
+  @PatchMapping(value = "/{idCandidato}/aval", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarAval(
+      @PathVariable Long idCandidato,
+      @RequestPart("aval") MultipartFile aval) {
+    serviceCandidato.updateCandidatoAval(idCandidato, aval);
+    return ResponseEntity.ok().build();
   }
 
   @Operation(summary = "Eliminar candidato por ID")
