@@ -35,4 +35,8 @@ public class Ciudadano {
 
   @Column(name = "voto_obligatorio", nullable = false)
   private Boolean votoObligatorio;
+
+  /** Indica si el ciudadano está habilitado para voto domiciliario. */
+  @Column(name = "habilitado_domicilio", nullable = false)
+  private Boolean habilitadoDomicilio = false;
 }
