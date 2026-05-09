@@ -1,16 +1,18 @@
 package PortalRegistraduriaBack.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -57,11 +59,11 @@ public class ControllerPartido {
   })
   @GetMapping(value = "/{idPartido}/logo")
   public ResponseEntity<byte[]> obtenerLogoById(@PathVariable Long idPartido) {
-    byte[] logoPng = servicePartido.findEstatutosById(idPartido);
+    byte[] logoPng = servicePartido.findLogoById(idPartido);
 
     return ResponseEntity.ok()
-      .contentType(MediaType.APPLICATION_PDF)
-      .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"logo.pdf\"")
+      .contentType(MediaType.APPLICATION_OCTET_STREAM)
+      .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"logo\"")
       .body(logoPng);
   }
 
@@ -87,7 +89,7 @@ public class ControllerPartido {
   })
   @GetMapping(value = "/{idPartido}/plataforma")
   public ResponseEntity<byte[]> obtenerPlataformaIdeologicaById(@PathVariable Long idPartido) {
-    byte[] plataformaPdf = servicePartido.findEstatutosById(idPartido);
+    byte[] plataformaPdf = servicePartido.findPlataformaIdeologicaById(idPartido);
 
     return ResponseEntity.ok()
       .contentType(MediaType.APPLICATION_PDF)
@@ -102,7 +104,7 @@ public class ControllerPartido {
   })
   @GetMapping(value = "/{idPartido}/registro")
   public ResponseEntity<byte[]> obtenerRegistroAfiliadosDirectivosById(@PathVariable Long idPartido) {
-    byte[] registroPdf = servicePartido.findEstatutosById(idPartido);
+    byte[] registroPdf = servicePartido.findRegistroAfiliadosDirectivosById(idPartido);
 
     return ResponseEntity.ok()
       .contentType(MediaType.APPLICATION_PDF)
@@ -130,38 +132,77 @@ public class ControllerPartido {
       @ApiResponse(responseCode = "200", description = "Partido creado exitosamente"),
       @ApiResponse(responseCode = "404", description = "Registrador no encontrado")
   })
-  @PostMapping(value = "/add", consumes = "multipart/form-data")
-  public ResponseEntity<ResponsePartidoDTO> crearPartido(
-    @RequestPart("data") CreatePartidoDTO partidoDTO,
-    @RequestPart("logo") MultipartFile logo,
-    @RequestPart("estatutos") MultipartFile estatutos,
-    @RequestPart("plataforma") MultipartFile plataforma,
-    @RequestPart("registro") MultipartFile registro,
-    @RequestPart("certificado") MultipartFile certificado
-  ) {
-    return ResponseEntity.ok(
-      servicePartido.addPartido(
-        partidoDTO,
-        logo,
-        estatutos,
-        plataforma,
-        registro,
-        certificado
-      )
-    );
+  @PostMapping("/add")
+  public ResponseEntity<ResponsePartidoDTO> crearPartido(@RequestBody CreatePartidoDTO partidoDTO) {
+    return ResponseEntity.ok(servicePartido.addPartido(partidoDTO));
   }
 
-  @Operation(summary = "Actualizar partido por ID")
+  @Operation(summary = "Actualizar datos del partido por ID")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Partido actualizado"),
       @ApiResponse(responseCode = "404", description = "Partido o registrador no encontrado")
   })
-  @PutMapping("/{idPartido}")
+  @PatchMapping("/{idPartido}")
   public ResponseEntity<ResponsePartidoDTO> actualizarPartido(
     @PathVariable Long idPartido,
     @RequestBody UpdatePartidoDTO partidoDTO
   ) {
     return ResponseEntity.ok(servicePartido.updatePartido(idPartido, partidoDTO));
+  }
+
+  @Operation(summary = "Actualizar logo del partido por ID")
+  @PatchMapping(value = "/{idPartido}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarLogo(
+    @PathVariable Long idPartido,
+    @RequestPart("logo") MultipartFile logo
+  ) {
+    servicePartido.updatePartidoLogo(idPartido, logo);
+
+    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+  }
+
+  @Operation(summary = "Actualizar estatutos del partido por ID")
+  @PatchMapping(value = "/{idPartido}/estatutos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarEstatutos(
+    @PathVariable Long idPartido,
+    @RequestPart("estatutos") MultipartFile estatutos
+  ) {
+    servicePartido.updatePartidoEstatutos(idPartido, estatutos);
+
+    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+  }
+
+  @Operation(summary = "Actualizar plataforma ideologica del partido por ID")
+  @PatchMapping(value = "/{idPartido}/plataforma", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarPlataforma(
+    @PathVariable Long idPartido,
+    @RequestPart("plataforma") MultipartFile plataforma
+  ) {
+    servicePartido.updatePartidoPlataforma(idPartido, plataforma);
+
+    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+  }
+
+  @Operation(summary = "Actualizar registro de afiliados y directivos del partido por ID")
+  @PatchMapping(value = "/{idPartido}/registro", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarRegistro(
+    @PathVariable Long idPartido,
+    @RequestPart("registro") MultipartFile registro
+  ) {
+    servicePartido.updatePartidoRegistro(idPartido, registro);
+
+    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+  }
+
+  @Operation(summary = "Actualizar certificado de representatividad del partido por ID")
+  @PatchMapping(value = "/{idPartido}/certificado", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> actualizarCertificado(
+    @PathVariable Long idPartido,
+    @RequestPart("certificado") MultipartFile certificado
+  ) {
+    servicePartido.updatePartidoCertificado(idPartido, certificado);
+
+    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
   }
 
   @Operation(summary = "Eliminar partido por ID")

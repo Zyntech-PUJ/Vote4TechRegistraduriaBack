@@ -167,124 +167,6 @@
         }
       }
     },
-    "/partido/{idPartido}": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener partido por ID",
-        "operationId": "obtenerPartidoById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Partido encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponsePartidoDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponsePartidoDTO"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Actualizar partido por ID",
-        "operationId": "actualizarPartido",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePartidoDTO"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Partido actualizado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponsePartidoDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido o registrador no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponsePartidoDTO"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Eliminar partido por ID",
-        "operationId": "eliminarPartido",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Partido eliminado"
-          },
-          "404": {
-            "description": "Partido no encontrado"
-          }
-        }
-      }
-    },
     "/mesa/{idMesa}": {
       "get": {
         "tags": [
@@ -1072,45 +954,13 @@
         "operationId": "crearPartido",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/CreatePartidoDTO"
-                  },
-                  "logo": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "estatutos": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "plataforma": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "registro": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "certificado": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                },
-                "required": [
-                  "certificado",
-                  "data",
-                  "estatutos",
-                  "logo",
-                  "plataforma",
-                  "registro"
-                ]
+                "$ref": "#/components/schemas/CreatePartidoDTO"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1635,6 +1485,549 @@
         }
       }
     },
+    "/partido/{idPartido}": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener partido por ID",
+        "operationId": "obtenerPartidoById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Partido encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Eliminar partido por ID",
+        "operationId": "eliminarPartido",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Partido eliminado"
+          },
+          "404": {
+            "description": "Partido no encontrado"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar datos del partido por ID",
+        "operationId": "actualizarPartido",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePartidoDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Partido actualizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido o registrador no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePartidoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/registro": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener registro de afiliados y directivos del partido por ID",
+        "operationId": "obtenerRegistroAfiliadosDirectivosById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro obtenido exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar registro de afiliados y directivos del partido por ID",
+        "operationId": "actualizarRegistro",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "registro": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "registro"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/plataforma": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener plataforma ideologica del partido por ID",
+        "operationId": "obtenerPlataformaIdeologicaById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plataforma ideologica obtenida exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar plataforma ideologica del partido por ID",
+        "operationId": "actualizarPlataforma",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "plataforma": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "plataforma"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/logo": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener logo del partido por ID",
+        "operationId": "obtenerLogoById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logo obtenido exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar logo del partido por ID",
+        "operationId": "actualizarLogo",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "logo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "logo"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/estatutos": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener estatutos del partido por ID",
+        "operationId": "obtenerEstatutosById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estatutos obtenidos exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar estatutos del partido por ID",
+        "operationId": "actualizarEstatutos",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "estatutos": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "estatutos"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/partido/{idPartido}/certificado": {
+      "get": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Obtener certificado de representatividad del partido por ID",
+        "operationId": "obtenerCertificadoRepresentatividadById",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Certificado obtenido exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Partido no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Partido"
+        ],
+        "summary": "Actualizar certificado de representatividad del partido por ID",
+        "operationId": "actualizarCertificado",
+        "parameters": [
+          {
+            "name": "idPartido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "certificado": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "certificado"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/eleccion/{idEleccion}/lanzar": {
       "patch": {
         "tags": [
@@ -1811,226 +2204,6 @@
                   "items": {
                     "$ref": "#/components/schemas/ResponseRegistradorDTO"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/partido/{idPartido}/registro": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener registro de afiliados y directivos del partido por ID",
-        "operationId": "obtenerRegistroAfiliadosDirectivosById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Registro obtenido exitosamente",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/partido/{idPartido}/plataforma": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener plataforma ideologica del partido por ID",
-        "operationId": "obtenerPlataformaIdeologicaById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plataforma ideologica obtenida exitosamente",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/partido/{idPartido}/logo": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener logo del partido por ID",
-        "operationId": "obtenerLogoById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logo obtenido exitosamente",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/partido/{idPartido}/estatutos": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener estatutos del partido por ID",
-        "operationId": "obtenerEstatutosById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Estatutos obtenidos exitosamente",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/partido/{idPartido}/certificado": {
-      "get": {
-        "tags": [
-          "Partido"
-        ],
-        "summary": "Obtener certificado de representatividad del partido por ID",
-        "operationId": "obtenerCertificadoRepresentatividadById",
-        "parameters": [
-          {
-            "name": "idPartido",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Certificado obtenido exitosamente",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Partido no encontrado",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
                 }
               }
             }
@@ -2521,50 +2694,6 @@
           }
         }
       },
-      "UpdatePartidoDTO": {
-        "type": "object",
-        "properties": {
-          "idPartido": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "sigla": {
-            "type": "string"
-          },
-          "activo": {
-            "type": "boolean"
-          },
-          "idRegistrador": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "ResponsePartidoDTO": {
-        "type": "object",
-        "properties": {
-          "idPartido": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "sigla": {
-            "type": "string"
-          },
-          "activo": {
-            "type": "boolean"
-          },
-          "idRegistrador": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
       "UpdateMesaDTO": {
         "type": "object",
         "properties": {
@@ -2949,6 +3078,28 @@
           }
         }
       },
+      "ResponsePartidoDTO": {
+        "type": "object",
+        "properties": {
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "CreateMesaDTO": {
         "type": "object",
         "properties": {
@@ -3159,6 +3310,28 @@
           },
           "password": {
             "type": "string"
+          }
+        }
+      },
+      "UpdatePartidoDTO": {
+        "type": "object",
+        "properties": {
+          "idPartido": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "idRegistrador": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

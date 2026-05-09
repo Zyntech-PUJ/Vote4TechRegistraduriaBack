@@ -45,15 +45,7 @@ public class ServicePartido implements IServicePartido {
   }
 
   @Override
-  public ResponsePartidoDTO addPartido(
-    CreatePartidoDTO partidoDTO,
-    MultipartFile logo,
-    MultipartFile estatutos,
-    MultipartFile plataforma,
-    MultipartFile registro,
-    MultipartFile certificado
-  ) {
-    
+  public ResponsePartidoDTO addPartido(CreatePartidoDTO partidoDTO) {
     Registrador registrador = repositoryRegistrador
       .findById(partidoDTO.getIdRegistrador())
       .orElseThrow(() -> new ResourceNotFoundException("Registrador no encontrado con id: " + partidoDTO.getIdRegistrador()));
@@ -62,17 +54,37 @@ public class ServicePartido implements IServicePartido {
     partido.setRegistrador(registrador);
     partido.setFechaCreacion(LocalDateTime.now());
 
-    try {
-      partido.setLogo(logo.getBytes());
-      partido.setEstatutos(estatutos.getBytes());
-      partido.setPlataformaIdeologica(plataforma.getBytes());
-      partido.setRegistroAfiliadosDirectivos(registro.getBytes());
-      partido.setCertificadoRepresentatividad(certificado.getBytes());
-    } catch(IOException e) {
-      throw new BadRequestException("Error procesando las imagenes/archivos");
-    }
-
     return mapperPartido.toResponseDTO(repositoryPartido.save(partido));
+  }
+
+  @Override
+  public Boolean updatePartidoLogo(Long id, MultipartFile logo) {
+    updateArchivoPartido(id, logo, TipoArchivoPartido.LOGO);
+    return true;
+  }
+
+  @Override
+  public Boolean updatePartidoEstatutos(Long id, MultipartFile estatutos) {
+    updateArchivoPartido(id, estatutos, TipoArchivoPartido.ESTATUTOS);
+    return true;
+  }
+
+  @Override
+  public Boolean updatePartidoPlataforma(Long id, MultipartFile plataforma) {
+    updateArchivoPartido(id, plataforma, TipoArchivoPartido.PLATAFORMA);
+    return true;
+  }
+
+  @Override
+  public Boolean updatePartidoRegistro(Long id, MultipartFile registro) {
+    updateArchivoPartido(id, registro, TipoArchivoPartido.REGISTRO);
+    return true;
+  }
+
+  @Override
+  public Boolean updatePartidoCertificado(Long id, MultipartFile certificado) {
+    updateArchivoPartido(id, certificado, TipoArchivoPartido.CERTIFICADO);
+    return true;
   }
 
   @Override
@@ -124,18 +136,61 @@ public class ServicePartido implements IServicePartido {
   }
 
   private ResponsePartidoDTO updateAndSavePartido(Partido partido, UpdatePartidoDTO partidoDTO) {
-    Registrador registrador = repositoryRegistrador
-      .findById(partidoDTO.getIdRegistrador())
-      .orElseThrow(() -> new ResourceNotFoundException(
-        "Registrador no encontrado con id: " + partidoDTO.getIdRegistrador()
-      ));
+    if (partidoDTO.getIdRegistrador() != null) {
+      Registrador registrador = repositoryRegistrador
+        .findById(partidoDTO.getIdRegistrador())
+        .orElseThrow(() -> new ResourceNotFoundException(
+          "Registrador no encontrado con id: " + partidoDTO.getIdRegistrador()
+        ));
+      partido.setRegistrador(registrador);
+    }
 
-    partido.setNombre(partidoDTO.getNombre());
-    partido.setSigla(partidoDTO.getSigla());
-    partido.setActivo(partidoDTO.getActivo());
-    partido.setRegistrador(registrador);
+    if (partidoDTO.getNombre() != null) {
+      partido.setNombre(partidoDTO.getNombre());
+    }
+
+    if (partidoDTO.getSigla() != null) {
+      partido.setSigla(partidoDTO.getSigla());
+    }
+
+    if (partidoDTO.getActivo() != null) {
+      partido.setActivo(partidoDTO.getActivo());
+    }
 
     return mapperPartido.toResponseDTO(repositoryPartido.save(partido));
+  }
+
+  private ResponsePartidoDTO updateArchivoPartido(Long id, MultipartFile archivo, TipoArchivoPartido tipoArchivo) {
+    Partido partido = repositoryPartido.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Partido no encontrado con id: " + id));
+
+    if (archivo == null || archivo.isEmpty()) {
+      throw new BadRequestException("El archivo enviado es obligatorio");
+    }
+
+    try {
+      byte[] contenido = archivo.getBytes();
+
+      switch (tipoArchivo) {
+        case LOGO -> partido.setLogo(contenido);
+        case ESTATUTOS -> partido.setEstatutos(contenido);
+        case PLATAFORMA -> partido.setPlataformaIdeologica(contenido);
+        case REGISTRO -> partido.setRegistroAfiliadosDirectivos(contenido);
+        case CERTIFICADO -> partido.setCertificadoRepresentatividad(contenido);
+      }
+    } catch (IOException e) {
+      throw new BadRequestException("Error procesando el archivo del partido");
+    }
+
+    return mapperPartido.toResponseDTO(repositoryPartido.save(partido));
+  }
+
+  private enum TipoArchivoPartido {
+    LOGO,
+    ESTATUTOS,
+    PLATAFORMA,
+    REGISTRO,
+    CERTIFICADO
   }
   
 }

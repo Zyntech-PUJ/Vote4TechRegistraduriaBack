@@ -12,19 +12,17 @@ public interface IServicePartido {
   
   public List<ResponsePartidoDTO> findAll();
   public ResponsePartidoDTO findById(Long id);
-  byte[] findLogoById(Long id);
-  byte[] findEstatutosById(Long id);
-  byte[] findPlataformaIdeologicaById(Long id);
-  byte[] findRegistroAfiliadosDirectivosById(Long id);
-  byte[] findCertificadoRepresentatividadById(Long id);
-  public ResponsePartidoDTO addPartido(
-    CreatePartidoDTO partidoDTO,
-    MultipartFile logo,
-    MultipartFile estatutos,
-    MultipartFile plataforma,
-    MultipartFile registro,
-    MultipartFile certificado
-  );
+  public byte[] findLogoById(Long id);
+  public byte[] findEstatutosById(Long id);
+  public byte[] findPlataformaIdeologicaById(Long id);
+  public byte[] findRegistroAfiliadosDirectivosById(Long id);
+  public byte[] findCertificadoRepresentatividadById(Long id);
+  public ResponsePartidoDTO addPartido(CreatePartidoDTO partidoDTO);
+  public Boolean updatePartidoLogo(Long id, MultipartFile logo);
+  public Boolean updatePartidoEstatutos(Long id, MultipartFile estatutos);
+  public Boolean updatePartidoPlataforma(Long id, MultipartFile plataforma);
+  public Boolean updatePartidoRegistro(Long id, MultipartFile registro);
+  public Boolean updatePartidoCertificado(Long id, MultipartFile certificado);
   public ResponsePartidoDTO updatePartido(UpdatePartidoDTO partidoDTO);
   public ResponsePartidoDTO updatePartido(Long id, UpdatePartidoDTO partidoDTO);
 
