@@ -873,13 +873,43 @@
         }
       }
     },
+    "/usuarios/login": {
+      "post": {
+        "tags": [
+          "usuario-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/registrador/login": {
       "post": {
         "tags": [
           "Registrador"
         ],
         "summary": "Login de registrador",
-        "operationId": "login",
+        "operationId": "login_1",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1253,7 +1283,7 @@
           "Consejo Nacional Electoral"
         ],
         "summary": "Login de consejo nacional",
-        "operationId": "login_1",
+        "operationId": "login_2",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1394,7 +1424,7 @@
           "Administrador Electoral"
         ],
         "summary": "Login de administrador electoral",
-        "operationId": "login_2",
+        "operationId": "login_3",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3212,6 +3242,34 @@
           },
           "password": {
             "type": "string"
+          }
+        }
+      },
+      "LoginDTO": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginResponseDTO": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "usuario": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
