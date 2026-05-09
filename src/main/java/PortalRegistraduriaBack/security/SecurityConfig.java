@@ -34,6 +34,7 @@ public class SecurityConfig {
         requests
 // ------------------------- SECTION .permitAll() -------------------------
 
+          .requestMatchers("/usuarios/login").permitAll()
           .requestMatchers("/registrador/login").permitAll()
           .requestMatchers("/administrador-electoral/login").permitAll()
           .requestMatchers("/consejo-nacional/login").permitAll()
