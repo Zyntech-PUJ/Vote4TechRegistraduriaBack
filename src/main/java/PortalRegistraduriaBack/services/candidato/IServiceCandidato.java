@@ -17,14 +17,12 @@ public interface IServiceCandidato {
   byte[] findCertificadoConsejoEstadoById(Long id);
   byte[] findCopiaCedulaById(Long id);
   byte[] findDocumentoAvalById(Long id);
-  public ResponseCandidatoDTO addCandidato(
-    CreateCandidatoDTO candidatoDTO,
-    MultipartFile foto,
-    MultipartFile formularioE6,
-    MultipartFile certificado,
-    MultipartFile cedula,
-    MultipartFile aval
-  );
+  public ResponseCandidatoDTO addCandidato(CreateCandidatoDTO candidatoDTO);
+  public void updateCandidatoFoto(Long id, MultipartFile foto);
+  public void updateCandidatoFormularioE6(Long id, MultipartFile formularioE6);
+  public void updateCandidatoCertificado(Long id, MultipartFile certificado);
+  public void updateCandidatoCedula(Long id, MultipartFile cedula);
+  public void updateCandidatoAval(Long id, MultipartFile aval);
   public ResponseCandidatoDTO updateCandidato(UpdateCandidatoDTO candidatoDTO);
   public ResponseCandidatoDTO updateCandidato(Long id, UpdateCandidatoDTO candidatoDTO);
   public void deleteById(Long id);

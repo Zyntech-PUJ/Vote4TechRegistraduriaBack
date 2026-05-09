@@ -54,14 +54,7 @@ public class ServiceCandidato implements IServiceCandidato {
   }
 
   @Override
-  public ResponseCandidatoDTO addCandidato(
-    CreateCandidatoDTO candidatoDTO,
-    MultipartFile foto,
-    MultipartFile formularioE6,
-    MultipartFile certificado,
-    MultipartFile cedula,
-    MultipartFile aval
-  ) {
+  public ResponseCandidatoDTO addCandidato(CreateCandidatoDTO candidatoDTO) {
     Registrador registrador = repositoryRegistrador.findById(candidatoDTO.getIdRegistrador())
         .orElseThrow(() -> new ResourceNotFoundException(
             "Registrador no encontrado con id: " + candidatoDTO.getIdRegistrador()));
@@ -79,23 +72,32 @@ public class ServiceCandidato implements IServiceCandidato {
     candidato.setLista(lista);
     candidato.setPartido(partido);
 
-    try {
-      validatePdfFile(foto, "foto");
-      validatePdfFile(formularioE6, "formularioE6");
-      validatePdfFile(certificado, "certificado");
-      validatePdfFile(cedula, "cedula");
-      validatePdfFile(aval, "aval");
-
-      candidato.setFoto(foto.getBytes());
-      candidato.setFormularioE6(formularioE6.getBytes());
-      candidato.setCertificadoConsejoEstado(certificado.getBytes());
-      candidato.setCopiaCedula(cedula.getBytes());
-      candidato.setDocumentoAval(aval.getBytes());
-    } catch(IOException e) {
-      throw new BadRequestException("Error procesando los archivos PDF");
-    }
-
     return mapperCandidato.toResponseDTO(repositoryCandidato.save(candidato));
+  }
+
+  @Override
+  public void updateCandidatoFoto(Long id, MultipartFile foto) {
+    updateArchivoCandidato(id, foto, TipoArchivoCandidato.FOTO);
+  }
+
+  @Override
+  public void updateCandidatoFormularioE6(Long id, MultipartFile formularioE6) {
+    updateArchivoCandidato(id, formularioE6, TipoArchivoCandidato.FORMULARIO_E6);
+  }
+
+  @Override
+  public void updateCandidatoCertificado(Long id, MultipartFile certificado) {
+    updateArchivoCandidato(id, certificado, TipoArchivoCandidato.CERTIFICADO);
+  }
+
+  @Override
+  public void updateCandidatoCedula(Long id, MultipartFile cedula) {
+    updateArchivoCandidato(id, cedula, TipoArchivoCandidato.CEDULA);
+  }
+
+  @Override
+  public void updateCandidatoAval(Long id, MultipartFile aval) {
+    updateArchivoCandidato(id, aval, TipoArchivoCandidato.AVAL);
   }
 
   @Override
@@ -182,6 +184,59 @@ public class ServiceCandidato implements IServiceCandidato {
     if (!isPdfByName && !isPdfByContentType) {
       throw new BadRequestException("El archivo " + fieldName + " debe estar en formato PDF.");
     }
+  }
+
+  private void validateImageFile(MultipartFile file, String fieldName) {
+    if (file == null || file.isEmpty()) {
+      throw new BadRequestException("El archivo " + fieldName + " es obligatorio.");
+    }
+
+    String contentType = file.getContentType();
+    if (contentType == null || !contentType.toLowerCase().startsWith("image/")) {
+      throw new BadRequestException("El archivo " + fieldName + " debe estar en un formato de imagen valido.");
+    }
+  }
+
+  private void updateArchivoCandidato(Long id, MultipartFile archivo, TipoArchivoCandidato tipoArchivo) {
+    Candidato candidato = repositoryCandidato.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Candidato no encontrado con id: " + id));
+
+    try {
+      switch (tipoArchivo) {
+        case FOTO -> {
+          validateImageFile(archivo, "foto");
+          candidato.setFoto(archivo.getBytes());
+        }
+        case FORMULARIO_E6 -> {
+          validatePdfFile(archivo, "formularioE6");
+          candidato.setFormularioE6(archivo.getBytes());
+        }
+        case CERTIFICADO -> {
+          validatePdfFile(archivo, "certificado");
+          candidato.setCertificadoConsejoEstado(archivo.getBytes());
+        }
+        case CEDULA -> {
+          validatePdfFile(archivo, "cedula");
+          candidato.setCopiaCedula(archivo.getBytes());
+        }
+        case AVAL -> {
+          validatePdfFile(archivo, "aval");
+          candidato.setDocumentoAval(archivo.getBytes());
+        }
+      }
+    } catch (IOException e) {
+      throw new BadRequestException("Error procesando el archivo del candidato");
+    }
+
+    repositoryCandidato.save(candidato);
+  }
+
+  private enum TipoArchivoCandidato {
+    FOTO,
+    FORMULARIO_E6,
+    CERTIFICADO,
+    CEDULA,
+    AVAL
   }
 
 }
