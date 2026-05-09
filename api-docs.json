@@ -1365,35 +1365,10 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/CreateCandidatoDTO"
-                  },
-                  "foto": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "formularioE6": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "certificado": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "cedula": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "aval": {
-                    "type": "string",
-                    "format": "binary"
                   }
                 },
                 "required": [
-                  "aval",
-                  "cedula",
-                  "certificado",
-                  "data",
-                  "formularioE6",
-                  "foto"
+                  "data"
                 ]
               }
             }
@@ -2187,6 +2162,376 @@
         }
       }
     },
+    "/candidato/{idCandidato}/foto": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener foto del candidato por ID",
+        "operationId": "obtenerFotoById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Actualizar foto del candidato por ID",
+        "operationId": "actualizarFoto",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foto": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "foto"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/formulario-e6": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener formulario E6 del candidato por ID",
+        "operationId": "obtenerFormularioE6ById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Actualizar formulario E6 del candidato por ID",
+        "operationId": "actualizarFormularioE6",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "formularioE6": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "formularioE6"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/certificado": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener certificado del candidato por ID",
+        "operationId": "obtenerCertificadoById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Actualizar certificado del candidato por ID",
+        "operationId": "actualizarCertificado_1",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "certificado": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "certificado"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/cedula": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener copia de cédula del candidato por ID",
+        "operationId": "obtenerCopiaCedulaById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Actualizar copia de cédula del candidato por ID",
+        "operationId": "actualizarCedula",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cedula": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "cedula"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/candidato/{idCandidato}/aval": {
+      "get": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Obtener documento aval del candidato por ID",
+        "operationId": "obtenerDocumentoAvalById",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidato"
+        ],
+        "summary": "Actualizar documento aval del candidato por ID",
+        "operationId": "actualizarAval",
+        "parameters": [
+          {
+            "name": "idCandidato",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "aval": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "aval"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/registrador/registradores": {
       "get": {
         "tags": [
@@ -2438,171 +2783,6 @@
                   "items": {
                     "$ref": "#/components/schemas/ResponseCentroVotacionDTO"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/candidato/{idCandidato}/foto": {
-      "get": {
-        "tags": [
-          "Candidato"
-        ],
-        "summary": "Obtener foto del candidato por ID",
-        "operationId": "obtenerFotoById",
-        "parameters": [
-          {
-            "name": "idCandidato",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "image/jpeg": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/candidato/{idCandidato}/formulario-e6": {
-      "get": {
-        "tags": [
-          "Candidato"
-        ],
-        "summary": "Obtener formulario E6 del candidato por ID",
-        "operationId": "obtenerFormularioE6ById",
-        "parameters": [
-          {
-            "name": "idCandidato",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/candidato/{idCandidato}/certificado": {
-      "get": {
-        "tags": [
-          "Candidato"
-        ],
-        "summary": "Obtener certificado del candidato por ID",
-        "operationId": "obtenerCertificadoById",
-        "parameters": [
-          {
-            "name": "idCandidato",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/candidato/{idCandidato}/cedula": {
-      "get": {
-        "tags": [
-          "Candidato"
-        ],
-        "summary": "Obtener copia de cédula del candidato por ID",
-        "operationId": "obtenerCopiaCedulaById",
-        "parameters": [
-          {
-            "name": "idCandidato",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/candidato/{idCandidato}/aval": {
-      "get": {
-        "tags": [
-          "Candidato"
-        ],
-        "summary": "Obtener documento aval del candidato por ID",
-        "operationId": "obtenerDocumentoAvalById",
-        "parameters": [
-          {
-            "name": "idCandidato",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
                 }
               }
             }
