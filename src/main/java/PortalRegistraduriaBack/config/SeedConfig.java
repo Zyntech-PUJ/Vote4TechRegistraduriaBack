@@ -342,183 +342,183 @@ public class SeedConfig {
       // ── 3. CIUDADANOS ────────────────────────────────────────────────
       Ciudadano c1 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Carlos Andrés Ríos Herrera").cedula("1005432100")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").habilitadoDomicilio(true).votoObligatorio(true).build());
 
       Ciudadano c2 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Laura Milena Gómez Peña").cedula("1032456789")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").habilitadoDomicilio(true).votoObligatorio(false).build());
 
       Ciudadano c3 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Juan David Martínez López").cedula("1018293847")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").habilitadoDomicilio(true).votoObligatorio(true).build());
 
       Ciudadano c4 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Valentina Ruiz Castillo").cedula("1057384920")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c5 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Andrés Felipe Vargas Torres").cedula("1094837261")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c6 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("María José Moreno Salcedo").cedula("1012938475")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c7 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Santiago Gómez Ramírez").cedula("1045678923")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c8 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Daniela Fernández Castro").cedula("1067891234")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c9 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Sebastián Ortega Muñoz").cedula("1023456780")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c10 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Camila Díaz Quintero").cedula("1089012345")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c11 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Julián Pérez Aguilar").cedula("1011234567")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c12 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Isabella Soto Medina").cedula("1078901234")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c13 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Nicolás Herrera Jiménez").cedula("1034567890")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c14 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Sofía Castellanos Ávila").cedula("1056789012")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c15 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Felipe Mendoza Restrepo").cedula("1000123456")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c16 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Manuela Rojas Ospina").cedula("1023459876")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c17 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("David Alejandro Cruz Patiño").cedula("1098765432")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c18 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Natalia Vergara Londoño").cedula("1043217654")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c19 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Luis Miguel Cárdenas Suárez").cedula("1065432198")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c20 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Paola Andrea Beltrán Niño").cedula("1087654321")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c21 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Esteban Mora Gutiérrez").cedula("1009876543")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c22 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Alejandra Pineda Acosta").cedula("1031122334")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c23 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Mateo Salazar Bermúdez").cedula("1052233445")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c24 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Gabriela Lozano Cifuentes").cedula("1073344556")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c25 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Tomás Arbeláez Montes").cedula("1014455667")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c26 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Luciana Quintero Bejarano").cedula("1035566778")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c27 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Samuel Ibáñez Parra").cedula("1056677889")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c28 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Valeria Escobar Zapata").cedula("1077788990")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c29 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Emilio Contreras Naranjo").cedula("1018899001")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c30 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Mariana Fuentes Calderón").cedula("1039900112")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c31 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Jerónimo Salcedo Prado").cedula("1060011223")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c32 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Simona Arias Velásquez").cedula("1081122334")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c33 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Rodrigo Castaño Mejía").cedula("1022233445")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c34 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Catalina Mora Henao").cedula("1043344556")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c35 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Iván Darío Ospina Cano").cedula("1064455667")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c36 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Renata Guerrero Tobón").cedula("1085566778")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c37 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Mauricio Ríos Londoño").cedula("1026677889")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c38 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Alejandro Peñuela Duque").cedula("1047788990")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c39 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Margarita Rosa Pinto Uribe").cedula("1068899001")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c40 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Cristian Camilo Zapata Gil").cedula("1089900112")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c41 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Yesenia Paola Cano Ríos").cedula("1030011223")
-          .genero("F").votoObligatorio(false).build());
+          .genero("F").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c42 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Harold Stiven Muñoz Bernal").cedula("1051122334")
-          .genero("M").votoObligatorio(true).build());
+          .genero("M").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c43 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Diana Marcela Varón Trujillo").cedula("1072233445")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       Ciudadano c44 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Nelson Eduardo Jaramillo Soto").cedula("1013344556")
-          .genero("M").votoObligatorio(false).build());
+          .genero("M").votoObligatorio(false).habilitadoDomicilio(true).build());
 
       Ciudadano c45 = repositoryCiudadano.save(Ciudadano.builder()
           .nombre("Viviana Liseth Agudelo Mora").cedula("1034455667")
-          .genero("F").votoObligatorio(true).build());
+          .genero("F").votoObligatorio(true).habilitadoDomicilio(true).build());
 
       System.out.println("✅ Ciudadanos cargados.");
 

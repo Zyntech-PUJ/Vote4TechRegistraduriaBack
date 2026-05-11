@@ -51,7 +51,6 @@ public class SecurityConfig {
             TipoRol.REGISTRADOR.name(),
             TipoRol.CONSEJO_NACIONAL.name()
           )
-          .requestMatchers("/registrador/**").hasAuthority(TipoRol.REGISTRADOR.name())
 
 // ------------------------- END SECTION .hasAuthority(REGISTRADOR) -------------------------
 // ------------------------- SECTION .hasAuthority(ADMINISTRADOR_ELECTORAL) -------------------------
@@ -62,6 +61,7 @@ public class SecurityConfig {
 // ------------------------- END SECTION .hasAuthority(ADMINISTRADOR_ELECTORAL) -------------------------
 // ------------------------- SECTION .hasAuthority(REGISTRADOR) - CENTRO VOTACION Y MESA -------------------------
 
+          .requestMatchers("/registrador/**").hasAuthority(TipoRol.REGISTRADOR.name())
           .requestMatchers(HttpMethod.POST, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
           .requestMatchers(HttpMethod.PUT, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
           .requestMatchers(HttpMethod.DELETE, "/centro-votacion/**").hasAuthority(TipoRol.REGISTRADOR.name())
