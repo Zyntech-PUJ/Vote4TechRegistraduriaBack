@@ -527,7 +527,7 @@ public class SeedConfig {
         .nombre("Centro Democratico")
         .sigla("CD")
         .fechaCreacion(LocalDateTime.now())
-        .activo(true)
+        .activo(false)
         .registrador(r1)
         .build();
 
@@ -555,7 +555,7 @@ public class SeedConfig {
       // ── 4. CANDIDATOS ────────────────────────────────────────────────
       Candidato cn1 = Candidato.builder()
         .nombre("Gustavo Petro Urrego").numero("1")
-        .activo(true)
+        .activo(false)
         .registrador(r1)
         .lista(l1)
         .partido(p1)
@@ -563,7 +563,7 @@ public class SeedConfig {
 
       Candidato cn2 = Candidato.builder()
         .nombre("Francia Márquez Mina").numero("2")
-        .activo(true)
+        .activo(false)
         .registrador(r1)
         .lista(l1)
         .partido(p1)
@@ -571,7 +571,7 @@ public class SeedConfig {
 
       Candidato cn3 = Candidato.builder()
         .nombre("Sergio Fajardo Valderrama").numero("3")
-        .activo(true)
+        .activo(false)
         .registrador(r1)
         .lista(l2)
         .partido(p1)
@@ -579,7 +579,7 @@ public class SeedConfig {
 
       Candidato cn4 = Candidato.builder()
         .nombre("Ingrid Betancourt Pulecio").numero("4")
-        .activo(true)
+        .activo(false)
         .registrador(r1)
         .lista(l2)
         .partido(p1)
