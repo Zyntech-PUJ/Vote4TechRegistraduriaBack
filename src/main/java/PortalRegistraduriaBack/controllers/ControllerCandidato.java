@@ -101,8 +101,8 @@ public class ControllerCandidato {
   }
 
   @Operation(summary = "Crear un nuevo candidato")
-  @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<ResponseCandidatoDTO> crearCandidato(@RequestPart("data") CreateCandidatoDTO candidatoDTO) {
+  @PostMapping(value = "/add")
+  public ResponseEntity<ResponseCandidatoDTO> crearCandidato(@RequestBody CreateCandidatoDTO candidatoDTO) {
     return ResponseEntity.ok(serviceCandidato.addCandidato(candidatoDTO));
   }
 
