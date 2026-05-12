@@ -47,7 +47,7 @@ public class ControllerCandidato {
 
   // FOTO - es imagen, no PDF
   @Operation(summary = "Obtener foto del candidato por ID")
-  @GetMapping(value = "/{idCandidato}/foto", produces = MediaType.IMAGE_JPEG_VALUE)
+  @GetMapping(value = "/{idCandidato}/foto", produces = MediaType.APPLICATION_PDF_VALUE)
   public ResponseEntity<byte[]> obtenerFotoById(@PathVariable Long idCandidato) {
     byte[] foto = serviceCandidato.findFotoById(idCandidato);
     return ResponseEntity.ok()
