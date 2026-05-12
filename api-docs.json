@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "http://10.43.100.131:8080",
       "description": "Generated server url"
     }
   ],
@@ -1389,20 +1389,13 @@
         "operationId": "crearCandidato",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/CreateCandidatoDTO"
-                  }
-                },
-                "required": [
-                  "data"
-                ]
+                "$ref": "#/components/schemas/CreateCandidatoDTO"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
