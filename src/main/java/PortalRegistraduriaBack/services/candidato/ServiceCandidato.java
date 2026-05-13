@@ -172,57 +172,23 @@ public class ServiceCandidato implements IServiceCandidato {
     return mapperCandidato.toResponseDTO(repositoryCandidato.save(candidato));
   }
 
-  private void validatePdfFile(MultipartFile file, String fieldName) {
-    if (file == null || file.isEmpty()) {
-      throw new BadRequestException("El archivo " + fieldName + " es obligatorio.");
-    }
-
-    String originalFilename = file.getOriginalFilename();
-    boolean isPdfByName = originalFilename != null && originalFilename.toLowerCase().endsWith(".pdf");
-    boolean isPdfByContentType = "application/pdf".equalsIgnoreCase(file.getContentType());
-
-    if (!isPdfByName && !isPdfByContentType) {
-      throw new BadRequestException("El archivo " + fieldName + " debe estar en formato PDF.");
-    }
-  }
-
-  private void validateImageFile(MultipartFile file, String fieldName) {
-    if (file == null || file.isEmpty()) {
-      throw new BadRequestException("El archivo " + fieldName + " es obligatorio.");
-    }
-
-    String contentType = file.getContentType();
-    if (contentType == null || !contentType.toLowerCase().startsWith("image/")) {
-      throw new BadRequestException("El archivo " + fieldName + " debe estar en un formato de imagen valido.");
-    }
-  }
-
   private void updateArchivoCandidato(Long id, MultipartFile archivo, TipoArchivoCandidato tipoArchivo) {
     Candidato candidato = repositoryCandidato.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Candidato no encontrado con id: " + id));
 
+    if (archivo == null || archivo.isEmpty()) {
+      throw new BadRequestException("El archivo enviado es obligatorio");
+    }
+
     try {
+      byte[] contenido = archivo.getBytes();
+
       switch (tipoArchivo) {
-        case FOTO -> {
-          validateImageFile(archivo, "foto");
-          candidato.setFoto(archivo.getBytes());
-        }
-        case FORMULARIO_E6 -> {
-          validatePdfFile(archivo, "formularioE6");
-          candidato.setFormularioE6(archivo.getBytes());
-        }
-        case CERTIFICADO -> {
-          validatePdfFile(archivo, "certificado");
-          candidato.setCertificadoConsejoEstado(archivo.getBytes());
-        }
-        case CEDULA -> {
-          validatePdfFile(archivo, "cedula");
-          candidato.setCopiaCedula(archivo.getBytes());
-        }
-        case AVAL -> {
-          validatePdfFile(archivo, "aval");
-          candidato.setDocumentoAval(archivo.getBytes());
-        }
+        case FOTO -> candidato.setFoto(contenido);
+        case FORMULARIO_E6 -> candidato.setFormularioE6(contenido);
+        case CERTIFICADO -> candidato.setCertificadoConsejoEstado(contenido);
+        case CEDULA -> candidato.setCopiaCedula(contenido);
+        case AVAL -> candidato.setDocumentoAval(contenido);
       }
     } catch (IOException e) {
       throw new BadRequestException("Error procesando el archivo del candidato");
