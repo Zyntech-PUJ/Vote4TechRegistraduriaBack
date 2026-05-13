@@ -127,7 +127,7 @@ public class ControllerCandidato {
   @PatchMapping(value = "/{idCandidato}/formulario-e6", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Void> actualizarFormularioE6(
       @PathVariable Long idCandidato,
-      @RequestPart("formularioE6") MultipartFile formularioE6) {
+      @RequestPart("formulario-e6") MultipartFile formularioE6) {
     serviceCandidato.updateCandidatoFormularioE6(idCandidato, formularioE6);
     return ResponseEntity.ok().build();
   }
